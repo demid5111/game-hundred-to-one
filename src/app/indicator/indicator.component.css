@@ -1,0 +1,19 @@
+div {
+  min-width: 44px;
+  min-height: 22px;
+  background-color: #a0a0a0;
+  border-radius: 30%;
+  border: 2px solid #1f1f1f;
+}
+
+.indicator-green {
+  background-color: #20e11b;
+}
+
+.indicator-yellow {
+  background-color: #FF0;
+}
+
+.indicator-red {
+  background-color: #F00;
+}

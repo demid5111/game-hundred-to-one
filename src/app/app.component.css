@@ -1,0 +1,155 @@
+.root-container {
+  width: 99vw;
+  height: 95vh;
+  display: grid;
+  grid-template-columns: 350px auto 350px;
+  grid-template-rows: 50px 100px 50px auto 100px;
+  grid-row-gap: 30px;
+}
+
+.game-name {
+  grid-column-start: 1;
+  grid-column-end: span 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.game-name > span {
+  font-size: 50px;
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game-question {
+  grid-column-start: 2;
+  grid-column-end: span 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.team-container{
+  display: grid;
+  grid-template-columns: 15px auto 15px;
+  grid-template-rows: 50px 100px 200px 50px auto;
+  grid-row-gap: 10px;
+}
+
+.team-element {
+  grid-column-end: span 1;
+  grid-row-start: 2;
+  grid-row-end: span 5;
+}
+
+.team-1 {
+  grid-column-start: 1;
+}
+
+.team-2 {
+  grid-column-start: 3;
+}
+
+.col-2 {
+  grid-column-start: 2;
+  grid-column-end: span 1;
+}
+
+.row-1 {
+  grid-row-start: 1;
+  grid-row-end: span 1;
+}
+
+.row-2 {
+  grid-row-start: 2;
+  grid-row-end: span 1;
+}
+
+.row-3 {
+  grid-row-start: 3;
+  grid-row-end: span 1;
+}
+
+.row-3 img {
+  width: 200px;
+  height: auto;
+}
+
+.row-4 {
+  grid-row-start: 4;
+  grid-row-end: span 1;
+}
+
+.choices {
+  grid-column-start: 2;
+  grid-column-end: span 1;
+  grid-row-start: 3;
+  grid-row-end: span 3;
+  text-align: center;
+  background-color: rgb(188, 184, 47);
+}
+
+.choices-container {
+  display: grid;
+  grid-row-gap: 10px;
+  grid-template-columns: 30px auto 30px;
+  grid-template-rows: 50px 50px 50px 50px 50px;
+  background-color: rgb(183, 28, 188);
+}
+
+.single-choice {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  text-align: center;
+  background-color: rgb(122, 188, 131);
+}
+
+.single-choice-1 {
+  grid-row-start: 1;
+  grid-row-end: span 1;
+}
+
+.single-choice-2 {
+  grid-row-start: 2;
+  grid-row-end: span 1;
+}
+
+.single-choice-3 {
+  grid-row-start: 3;
+  grid-row-end: span 1;
+}
+
+.single-choice-4 {
+  grid-row-start: 4;
+  grid-row-end: span 1;
+}
+
+.single-choice-5 {
+  grid-row-start: 5;
+  grid-row-end: span 1;
+}
+
+
+.odometer {
+  font-size: 50px;
+}
+
+.team-enabled {
+  background-color: #05bc08;
+}
+
+.alv-indicator{
+  justify-self: start;
+  grid-row: 1 / span 1;
+  grid-column: 2 /  span 1;
+}
+
+.centered {
+  display:block;
+  margin:auto;
+}
+
+.text-large {
+  font-size: 40px;
+}
