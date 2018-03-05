@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'app-indicator',
@@ -10,8 +10,18 @@ export class IndicatorComponent {
     @Input()
     private indicatorColor: number[];
 
+    @Output()
+    private failedAnswerCb: EventEmitter<any> = new EventEmitter();
+
     public getIndicatorClassName(id: number): string {
         return indicatorClassNameMap.get(this.indicatorColor[id]);
+    }
+
+    private onFailed(id:number){
+      if (this.indicatorColor[id] === 3){
+        return;
+      }
+      this.failedAnswerCb.emit(id);
     }
 }
 

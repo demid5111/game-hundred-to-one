@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
   pointsTeam2: number;
   failsTeam1: number[];
   failsTeam2: number[];
+  showAnswersMode: boolean;
   private openedAnswers: boolean[];
 
   ngOnInit() {
@@ -35,8 +36,9 @@ export class AppComponent implements OnInit {
     this.counterTeam2 = this.createOdometer('#odometer2');
     this.pointsTeam1 = 0;
     this.pointsTeam2 = 0;
-    this.failsTeam1 = [1,1,1];
-    this.failsTeam2 = [1,1,1];
+    this.failsTeam1 = [1, 1, 1];
+    this.failsTeam2 = [1, 1, 1];
+    this.showAnswersMode = false;
 
     this.answersService.getAnswers()
       .subscribe((res) => {
@@ -53,10 +55,6 @@ export class AppComponent implements OnInit {
 
   public isFirstTeamVisible() {
     return this.activeTeam == 1;
-  }
-
-  public isFirstTeamInVisible() {
-    return this.activeTeam != 1;
   }
 
   private createOdometer(id) {
@@ -86,17 +84,24 @@ export class AppComponent implements OnInit {
   }
 
   private onSelected(id: number) {
+    this.openedAnswers[id] = true;
+    if (this.showAnswersMode) {
+      return;
+    }
     const award = +(this.answers[this.currentQuestionIdx].answers[id].quantity);
     if (this.activeTeam == 1) {
       this.pointsTeam1 += award;
-      this.activeTeam = 2;
       this.counterTeam1.innerHTML = this.pointsTeam1;
     } else {
       this.pointsTeam2 += award;
-      this.activeTeam = 1;
       this.counterTeam2.innerHTML = this.pointsTeam2;
     }
-    this.openedAnswers[id] = true;
+
+    const fails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
+    if (this.isAnotherTeamBuffer(fails)) {
+      // switch
+      this.activeTeam = this.activeTeam === 1 ? 2 : 1;
+    }
   }
 
   private nextQuestion() {
@@ -117,11 +122,38 @@ export class AppComponent implements OnInit {
   }
 
   private isNextBtnEnabled() {
-    return _.find(this.openedAnswers, false) === undefined;
+    return _.find(this.openedAnswers, (x) => x === false) === undefined;
   }
 
   private eraseAnswers() {
     const l = _.range(this.answers[this.currentQuestionIdx].answers.length);
     this.openedAnswers = _.map(l, (x) => false);
+    this.showAnswersMode = false;
+    this.failsTeam1 = [1, 1, 1];
+    this.failsTeam2 = [1, 1, 1];
+  }
+
+  private onFailedAnswer(id) {
+    if (this.activeTeam === 1) {
+      this.failsTeam1[id] = 3;
+    } else {
+      this.failsTeam2[id] = 3;
+    }
+    const fails = this.activeTeam === 1 ? this.failsTeam1 : this.failsTeam2;
+    const opponentsFails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
+    // now check if another team has buffer
+    if (this.isAnotherTeamBuffer(opponentsFails)) {
+      // this means next step
+      this.activeTeam = this.activeTeam === 1 ? 2 : 1;
+    } else if (!this.isAnotherTeamBuffer(fails)) {
+      this.showAnswersMode = true;
+      this.activeTeam = this.activeTeam === 1 ? 2 : 1;
+    }
+  }
+
+  private isAnotherTeamBuffer(fails) {
+    // now check if another team has buffer
+    const tries = _.reject(fails, (x) => x === 3);
+    return tries.length > 0;
   }
 }

@@ -1,11 +1,17 @@
 <div class="misses misses-container">
   <div class="col-1">
-    <div [className]="getIndicatorClassName(0)" class="circle"></div>
+    <div [className]="getIndicatorClassName(0)"
+         class="circle"
+         (click)="onFailed(0)"></div>
   </div>
   <div class="col-2">
-    <div [className]="getIndicatorClassName(1)" class="circle"></div>
+    <div [className]="getIndicatorClassName(1)"
+         class="circle"
+         (click)="onFailed(1)"></div>
   </div>
   <div class="col-3">
-    <div [className]="getIndicatorClassName(2)" class="circle"></div>
+    <div [className]="getIndicatorClassName(2)"
+         class="circle"
+         (click)="onFailed(2)"></div>
   </div>
 </div>
