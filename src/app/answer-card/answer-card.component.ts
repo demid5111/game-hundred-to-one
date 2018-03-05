@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -8,30 +8,31 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('flipState', [
       state('active', style({
-        transform: 'rotateX(179deg)'
+        transform: 'rotateY(179deg)'
       })),
       state('inactive', style({
-        transform: 'rotateX(0)'
+        transform: 'rotateY(0)'
       })),
-      transition('active => inactive', animate('500ms ease-out')),
-      transition('inactive => active', animate('500ms ease-in'))
+      transition('active => inactive', animate('400ms ease-out')),
+      transition('inactive => active', animate('400ms ease-in'))
     ])
   ]
 })
-export class AnswerCardComponent implements OnInit {
+export class AnswerCardComponent{
   @Input()
   answer: any;
 
-  constructor() { }
+  @Input()
+  id: number;
 
-  ngOnInit() {
-    console.log(`Received answer ${this.answer.answer} [${this.answer.quantity}]`);
-  }
+  @Output()
+  answeredCb : EventEmitter<any> = new EventEmitter();
 
   flip: string = 'inactive';
+  guessMe: string = 'Отгадай-ка!';
 
   toggleFlip() {
     this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
+    this.answeredCb.emit(this.id);
   }
-
 }

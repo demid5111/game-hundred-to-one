@@ -14,3 +14,23 @@ body {
 .text-large {
   font-size: 40px;
 }
+
+.col-1 {
+  grid-column-start: 1;
+  grid-column-end: span 1;
+}
+
+.col-2 {
+  grid-column-start: 2;
+  grid-column-end: span 1;
+}
+
+.col-3 {
+  grid-column-start: 3;
+  grid-column-end: span 1;
+}
+
+.col-4 {
+  grid-column-start: 4;
+  grid-column-end: span 1;
+}

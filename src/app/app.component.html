@@ -5,8 +5,9 @@
     </span>
   </div>
 
-  <div class="game-question text-large centered">
-    {{placeholder + currentQuestion}}
+  <div class="game-question text-large centered"
+       *ngIf="answers">
+    {{getCurrentQuestion()}}
   </div>
 
   <div class="team-element team-1 team-container"
@@ -24,7 +25,7 @@
   </div>
 
   <div class="team-element team-2 team-container"
-       [class.team-enabled]="isFirstTeamVisible()">
+       [class.team-enabled]="!isFirstTeamVisible()">
     <span class="row-1 col-2 centered text-large">
       Team 2
     </span>
@@ -37,27 +38,33 @@
     </div>
   </div>
 
-  <div class="choices choices-container">
+  <div class="choices choices-container"
+       *ngIf="answers">
     <app-answer-card class="single-choice single-choice-1"
-                     [answer]="answers[0]"></app-answer-card>
+                     [answer]="getCurrentAnswer(0)"
+                     (answeredCb)="onSelected(0)"></app-answer-card>
     <app-answer-card class="single-choice single-choice-2"
-                     [answer]="answers[1]"></app-answer-card>
+                     [answer]="getCurrentAnswer(1)"
+                     (answeredCb)="onSelected(1)"></app-answer-card>
     <app-answer-card class="single-choice single-choice-3"
-                     [answer]="answers[2]"></app-answer-card>
+                     [answer]="getCurrentAnswer(2)"
+                     (answeredCb)="onSelected(2)"></app-answer-card>
     <app-answer-card class="single-choice single-choice-4"
-                     [answer]="answers[3]"></app-answer-card>
+                     [answer]="getCurrentAnswer(3)"
+                     (answeredCb)="onSelected(3)"></app-answer-card>
     <app-answer-card class="single-choice single-choice-5"
-                     [answer]="answers[4]"></app-answer-card>
+                     [answer]="getCurrentAnswer(4)"
+                     (answeredCb)="onSelected(4)"></app-answer-card>
   </div>
 
-  <div class="controls controls-container">
-
-  <div class="col-1 row-1">
-    <img [src]="backIcon">
-  </div>
-  <div class="col-3 row-1">
-    <img [src]="nextIcon">
-  </div>
+  <div class="controls controls-container"
+       *ngIf="answers">
+    <div class="col-2 row-1">
+      <div class="img-circular back-btn" (click)="previousQuestion()"></div>
+    </div>
+    <div class="col-4 row-1">
+      <div class="img-circular next-btn" (click)="nextQuestion()"></div>
+    </div>
   </div>
 </div>
 
