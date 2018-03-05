@@ -46,3 +46,10 @@
   -ms-transform     : rotateX(-180deg);
   transform         : rotateX(-180deg);
 }
+
+
+.answer-container {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(1, auto);
+}

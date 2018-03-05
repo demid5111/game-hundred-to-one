@@ -5,3 +5,12 @@ body {
   height: 100%;
   font-family: 'Alegreya SC', serif;
 }
+
+.centered {
+  display:block;
+  margin:auto;
+}
+
+.text-large {
+  font-size: 40px;
+}

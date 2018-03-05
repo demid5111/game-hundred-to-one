@@ -16,12 +16,16 @@ export class AppComponent implements OnInit {
   counterTeam2: any;
   teamOneIcon: string;
   teamTwoIcon: string;
+  backIcon: string;
+  nextIcon: string;
   placeholder: string;
   currentQuestion: string;
 
   ngOnInit() {
     this.teamOneIcon = '/assets/images/3.png';
     this.teamTwoIcon = '/assets/images/5.png';
+    this.backIcon = '/assets/images/back.png';
+    this.nextIcon = '/assets/images/next.png';
     this.placeholder = 'Вопрос: ';
     this.currentQuestion = 'Кто следующий?';
     this.counterTeam1 = this.createOdometer('#odometer1');
@@ -37,23 +41,23 @@ export class AppComponent implements OnInit {
     this.activeTeam = 2;
     this.answers = [
       {
-        answer: "Answer 1",
+        answer: "Ответ 1",
         quantity: 56,
       },
       {
-        answer: "Answer 2",
+        answer: "Ответ 2",
         quantity: 14,
       },
       {
-        answer: "Answer 3",
+        answer: "Ответ 3",
         quantity: 12,
       },
       {
-        answer: "Answer 4",
+        answer: "Ответ 4",
         quantity: 4,
       },
       {
-        answer: "Answer 5",
+        answer: "Ответ 5",
         quantity: 1
       },
     ];

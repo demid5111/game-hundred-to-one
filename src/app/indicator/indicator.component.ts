@@ -17,7 +17,7 @@ export class IndicatorComponent {
 }
 
 const indicatorClassNameMap = new Map<number, string>([
-    [1, 'indicator-green'],
-    [2, 'indicator-yellow'],
-    [3, 'indicator-red']
+    [1, 'indicator-green circle'],
+    [2, 'indicator-yellow circle'],
+    [3, 'indicator-red circle']
 ]);

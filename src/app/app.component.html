@@ -38,8 +38,6 @@
   </div>
 
   <div class="choices choices-container">
-    Choices
-
     <app-answer-card class="single-choice single-choice-1"
                      [answer]="answers[0]"></app-answer-card>
     <app-answer-card class="single-choice single-choice-2"
@@ -50,6 +48,16 @@
                      [answer]="answers[3]"></app-answer-card>
     <app-answer-card class="single-choice single-choice-5"
                      [answer]="answers[4]"></app-answer-card>
+  </div>
+
+  <div class="controls controls-container">
+
+  <div class="col-1 row-1">
+    <img [src]="backIcon">
+  </div>
+  <div class="col-3 row-1">
+    <img [src]="nextIcon">
+  </div>
   </div>
 </div>
 
