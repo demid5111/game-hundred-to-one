@@ -15,6 +15,10 @@ body {
   font-size: 40px;
 }
 
+.text-large-2x {
+  font-size: 80px;
+}
+
 .col-1 {
   grid-column-start: 1;
   grid-column-end: span 1;

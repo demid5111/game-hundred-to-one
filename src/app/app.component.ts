@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
   failsTeam1: number[];
   failsTeam2: number[];
   showAnswersMode: boolean;
+  showFireworks: boolean;
+  gameStarted: boolean;
   private openedAnswers: boolean[];
 
   ngOnInit() {
@@ -32,13 +34,13 @@ export class AppComponent implements OnInit {
     this.backIcon = '/assets/images/back.png';
     this.nextIcon = '/assets/images/next.png';
     this.placeholder = 'Вопрос';
-    this.counterTeam1 = this.createOdometer('#odometer1');
-    this.counterTeam2 = this.createOdometer('#odometer2');
     this.pointsTeam1 = 0;
     this.pointsTeam2 = 0;
     this.failsTeam1 = [1, 1, 1];
     this.failsTeam2 = [1, 1, 1];
     this.showAnswersMode = false;
+    this.showFireworks = false;
+    this.gameStarted = false;
 
     this.answersService.getAnswers()
       .subscribe((res) => {
@@ -55,6 +57,10 @@ export class AppComponent implements OnInit {
 
   public isFirstTeamVisible() {
     return this.activeTeam == 1;
+  }
+
+  public isWinner(id) {
+    return this.activeTeam == id || this.activeTeam == 3;
   }
 
   private createOdometer(id) {
@@ -105,7 +111,15 @@ export class AppComponent implements OnInit {
   }
 
   private nextQuestion() {
-    if (this.currentQuestionIdx === this.answers.length - 1) {
+    if (this.currentQuestionIdx === this.answers.length - 1
+      && (this.isNextBtnEnabled() ||
+        (this.isAnotherTeamBuffer(this.failsTeam1)
+          && this.isAnotherTeamBuffer(this.failsTeam2)))) {
+      this.showFireworks = true;
+      this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
+        : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
+      return;
+    } else if (this.currentQuestionIdx === this.answers.length - 1) {
       return;
     } else if (!this.isNextBtnEnabled()) {
       return;
@@ -133,7 +147,10 @@ export class AppComponent implements OnInit {
     this.failsTeam2 = [1, 1, 1];
   }
 
-  private onFailedAnswer(id) {
+  private onFailedAnswer(id, sourceTeam) {
+    if (this.activeTeam !== sourceTeam) {
+      return;
+    }
     if (this.activeTeam === 1) {
       this.failsTeam1[id] = 3;
     } else {
@@ -155,5 +172,16 @@ export class AppComponent implements OnInit {
     // now check if another team has buffer
     const tries = _.reject(fails, (x) => x === 3);
     return tries.length > 0;
+  }
+
+  private startGame() {
+    setTimeout(() => {
+      this.gameStarted = true;
+      setTimeout(() => {
+        this.counterTeam1 = this.createOdometer('#odometer1');
+        this.counterTeam2 = this.createOdometer('#odometer2');
+      });
+
+    }, 1000);
   }
 }
