@@ -21,6 +21,9 @@ export class AppComponent implements OnInit {
   currentQuestionIdx: number;
   pointsTeam1: number;
   pointsTeam2: number;
+  failsTeam1: number[];
+  failsTeam2: number[];
+  private openedAnswers: boolean[];
 
   ngOnInit() {
     this.teamOneIcon = '/assets/images/3.png';
@@ -30,19 +33,22 @@ export class AppComponent implements OnInit {
     this.placeholder = 'Вопрос';
     this.counterTeam1 = this.createOdometer('#odometer1');
     this.counterTeam2 = this.createOdometer('#odometer2');
-    this.pointsTeam1 = 100;
-    this.pointsTeam2 = 100;
+    this.pointsTeam1 = 0;
+    this.pointsTeam2 = 0;
+    this.failsTeam1 = [1,1,1];
+    this.failsTeam2 = [1,1,1];
 
-    // setTimeout(() => this.counterTeam1.innerHTML = '456', 3000);
-    // setTimeout(() => this.counterTeam2.innerHTML = '456', 3000);
+    this.answersService.getAnswers()
+      .subscribe((res) => {
+        this.answers = res;
+        this.eraseAnswers();
+      });
   }
 
   constructor(private answersService: AnswersService) {
     this.title = "Игра: 100-к-1. Шутки про рутину и не только...";
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
-    this.answersService.getAnswers()
-      .subscribe((res) => this.answers = res);
   }
 
   public isFirstTeamVisible() {
@@ -90,19 +96,32 @@ export class AppComponent implements OnInit {
       this.activeTeam = 1;
       this.counterTeam2.innerHTML = this.pointsTeam2;
     }
+    this.openedAnswers[id] = true;
   }
 
-  private nextQuestion(){
-    if (this.currentQuestionIdx === this.answers.length - 1){
+  private nextQuestion() {
+    if (this.currentQuestionIdx === this.answers.length - 1) {
+      return;
+    } else if (!this.isNextBtnEnabled()) {
       return;
     }
     this.currentQuestionIdx += 1;
+    this.eraseAnswers();
   }
 
-  private previousQuestion(){
-    if (this.currentQuestionIdx === 0){
+  private previousQuestion() {
+    if (this.currentQuestionIdx === 0) {
       return;
     }
     this.currentQuestionIdx -= 1;
+  }
+
+  private isNextBtnEnabled() {
+    return _.find(this.openedAnswers, false) === undefined;
+  }
+
+  private eraseAnswers() {
+    const l = _.range(this.answers[this.currentQuestionIdx].answers.length);
+    this.openedAnswers = _.map(l, (x) => false);
   }
 }

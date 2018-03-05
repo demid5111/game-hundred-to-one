@@ -137,6 +137,10 @@
   opacity: 1;
 }
 
+.disabled {
+  opacity: 0.8;
+}
+
 .alv-indicator{
   justify-self: start;
   grid-row: 1 / span 1;

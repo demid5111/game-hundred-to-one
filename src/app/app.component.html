@@ -20,7 +20,7 @@
       <img [src]="teamOneIcon">
     </div>
     <div class="row-4 col-2">
-      <app-indicator [indicatorColor]="1"></app-indicator>
+      <app-indicator [indicatorColor]="failsTeam1"></app-indicator>
     </div>
   </div>
 
@@ -34,7 +34,7 @@
       <img [src]="teamTwoIcon">
     </div>
     <div class="row-4 col-2">
-      <app-indicator [indicatorColor]="1"></app-indicator>
+      <app-indicator [indicatorColor]="failsTeam2"></app-indicator>
     </div>
   </div>
 
@@ -60,10 +60,12 @@
   <div class="controls controls-container"
        *ngIf="answers">
     <div class="col-2 row-1">
-      <div class="img-circular back-btn" (click)="previousQuestion()"></div>
+      <div class="img-circular back-btn"
+           (click)="previousQuestion()"></div>
     </div>
     <div class="col-4 row-1">
-      <div class="img-circular next-btn" (click)="nextQuestion()"></div>
+      <div class="img-circular next-btn"
+           (click)="nextQuestion()"></div>
     </div>
   </div>
 </div>

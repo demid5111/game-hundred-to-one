@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -31,8 +31,22 @@ export class AnswerCardComponent{
   flip: string = 'inactive';
   guessMe: string = 'Отгадай-ка!';
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.firstValue){
+      return;
+    }
+
+    this.flip = 'inactive';
+  }
+
   toggleFlip() {
+    // reject any new re-opens of the answer
+    if (this.flip == 'active') {
+      return;
+    }
     this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
-    this.answeredCb.emit(this.id);
+    if (this.flip == 'active') {
+      this.answeredCb.emit(this.id);
+    }
   }
 }

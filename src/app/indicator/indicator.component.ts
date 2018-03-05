@@ -7,12 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 
 export class IndicatorComponent {
-
     @Input()
-    private indicatorColor: number;
+    private indicatorColor: number[];
 
-    public getIndicatorClassName(): string {
-        return indicatorClassNameMap.get(this.indicatorColor);
+    public getIndicatorClassName(id: number): string {
+        return indicatorClassNameMap.get(this.indicatorColor[id]);
     }
 }
 
