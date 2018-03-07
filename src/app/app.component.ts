@@ -27,6 +27,11 @@ export class AppComponent implements OnInit {
   showFireworks: boolean;
   gameStarted: boolean;
   private openedAnswers: boolean[];
+  private startActiveTeam: number;
+  private audioFail: HTMLAudioElement;
+  private audioFlip: HTMLAudioElement;
+  private audioCash: HTMLAudioElement;
+  private audioWin: HTMLAudioElement;
 
   ngOnInit() {
     this.teamOneIcon = '/assets/images/3.png';
@@ -41,12 +46,16 @@ export class AppComponent implements OnInit {
     this.showAnswersMode = false;
     this.showFireworks = false;
     this.gameStarted = false;
+    this.startActiveTeam = this.activeTeam;
+
+    this.initSounds();
 
     this.answersService.getAnswers()
       .subscribe((res) => {
         this.answers = res;
         this.eraseAnswers();
       });
+
   }
 
   constructor(private answersService: AnswersService) {
@@ -91,6 +100,8 @@ export class AppComponent implements OnInit {
 
   private onSelected(id: number) {
     this.openedAnswers[id] = true;
+    this.playFlipSound();
+    this.playCashSound();
     if (this.showAnswersMode) {
       return;
     }
@@ -118,6 +129,7 @@ export class AppComponent implements OnInit {
       this.showFireworks = true;
       this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
         : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
+      this.playWinSound();
       return;
     } else if (this.currentQuestionIdx === this.answers.length - 1) {
       return;
@@ -125,6 +137,11 @@ export class AppComponent implements OnInit {
       return;
     }
     this.currentQuestionIdx += 1;
+    const newTeam = this.activeTeam === 1 ? 2 : 1;
+    if (this.activeTeam === this.startActiveTeam){
+      this.activeTeam = this.activeTeam === 1 ? 2 : 1;
+      this.startActiveTeam = this.activeTeam;
+    }
     this.eraseAnswers();
   }
 
@@ -151,6 +168,9 @@ export class AppComponent implements OnInit {
     if (this.activeTeam !== sourceTeam) {
       return;
     }
+
+    this.playFailSound();
+
     if (this.activeTeam === 1) {
       this.failsTeam1[id] = 3;
     } else {
@@ -166,6 +186,42 @@ export class AppComponent implements OnInit {
       this.showAnswersMode = true;
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
     }
+  }
+
+  private playFailSound(){
+    this.audioFail.play();
+  }
+
+  private playFlipSound(){
+    this.audioFlip.play();
+  }
+
+  private playCashSound(){
+    this.audioCash.play();
+  }
+
+  private playWinSound(){
+    this.audioWin.play();
+  }
+
+  private initSounds(){
+    this.audioFail = new Audio();
+    this.audioFail.src = "/assets/sounds/fail.mp3";
+    this.audioFail.load();
+    this.audioFail.playbackRate=2.5;
+
+    this.audioFlip = new Audio();
+    this.audioFlip.src = "../../../assets/sounds/turn.mp3";
+    this.audioFlip.load();
+
+    this.audioCash = new Audio();
+    this.audioCash.src = "../../../assets/sounds/cash.wav";
+    this.audioCash.load();
+    this.audioCash.playbackRate=2.5;
+
+    this.audioWin = new Audio();
+    this.audioWin.src = "../../../assets/sounds/win.mp3";
+    this.audioWin.load();
   }
 
   private isAnotherTeamBuffer(fails) {
