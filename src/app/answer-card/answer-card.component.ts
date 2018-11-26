@@ -26,13 +26,13 @@ export class AnswerCardComponent{
   id: number;
 
   @Output()
-  answeredCb : EventEmitter<any> = new EventEmitter();
+  answeredCb: EventEmitter<any> = new EventEmitter();
 
-  flip: string = 'inactive';
-  guessMe: string = 'Отгадай-ка!';
+  flip = 'inactive';
+  guessMe = 'Отгадай-ка!';
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.firstValue){
+    if (changes.firstValue) {
       return;
     }
 
@@ -41,11 +41,11 @@ export class AnswerCardComponent{
 
   toggleFlip() {
     // reject any new re-opens of the answer
-    if (this.flip == 'active') {
+    if (this.flip === 'active') {
       return;
     }
-    this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
-    if (this.flip == 'active') {
+    this.flip = (this.flip === 'inactive') ? 'active' : 'inactive';
+    if (this.flip === 'active') {
       this.answeredCb.emit(this.id);
     }
   }

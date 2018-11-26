@@ -59,17 +59,17 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private answersService: AnswersService) {
-    this.title = "Игра: 100-к-1. Шутки про рутину и не только...";
+    this.title = 'Игра: 100-к-1. Шутки про рутину и не только...';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
   }
 
   public isFirstTeamVisible() {
-    return this.activeTeam == 1;
+    return this.activeTeam === 1;
   }
 
   public isWinner(id) {
-    return this.activeTeam == id || this.activeTeam == 3;
+    return this.activeTeam === id || this.activeTeam === 3;
   }
 
   private createOdometer(id) {
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
 
   private getCurrentQuestion() {
     const question = this.answers[this.currentQuestionIdx].question;
-    const addition = `${question.indexOf('?') != -1 ? '' : '?'}`;
+    const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
     return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
   }
 
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
       return;
     }
     const award = +(this.answers[this.currentQuestionIdx].answers[id].quantity);
-    if (this.activeTeam == 1) {
+    if (this.activeTeam === 1) {
       this.pointsTeam1 += award;
       this.counterTeam1.innerHTML = this.pointsTeam1;
     } else {
@@ -196,31 +196,31 @@ export class AppComponent implements OnInit {
     this.audioFlip.play();
   }
 
-  private playCashSound(){
+  private playCashSound() {
     this.audioCash.play();
   }
 
-  private playWinSound(){
+  private playWinSound() {
     this.audioWin.play();
   }
 
-  private initSounds(){
+  private initSounds() {
     this.audioFail = new Audio();
-    this.audioFail.src = "/assets/sounds/fail.mp3";
+    this.audioFail.src = '/assets/sounds/fail.mp3';
     this.audioFail.load();
-    this.audioFail.playbackRate=2.5;
+    this.audioFail.playbackRate = 2.5;
 
     this.audioFlip = new Audio();
-    this.audioFlip.src = "../../../assets/sounds/turn.mp3";
+    this.audioFlip.src = '../../../assets/sounds/turn.mp3';
     this.audioFlip.load();
 
     this.audioCash = new Audio();
-    this.audioCash.src = "../../../assets/sounds/cash.wav";
+    this.audioCash.src = '../../../assets/sounds/cash.wav';
     this.audioCash.load();
-    this.audioCash.playbackRate=2.5;
+    this.audioCash.playbackRate = 2.5;
 
     this.audioWin = new Audio();
-    this.audioWin.src = "../../../assets/sounds/win.mp3";
+    this.audioWin.src = '../../../assets/sounds/win.mp3';
     this.audioWin.load();
   }
 
