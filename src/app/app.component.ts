@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { AnswersService } from './answers.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,8 @@ import { AnswersService } from './answers.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  winnerTeamId: number;
+  gameEnded: boolean;
   answers: any;
   activeTeam: number;
   title: string;
@@ -49,12 +52,6 @@ export class AppComponent implements OnInit {
     this.startActiveTeam = this.activeTeam;
 
     this.initSounds();
-
-    this.answersService.getAnswers()
-      .subscribe((res) => {
-        this.answers = res;
-        this.eraseAnswers();
-      });
 
   }
 
@@ -129,6 +126,9 @@ export class AppComponent implements OnInit {
       this.showFireworks = true;
       this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
         : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
+      this.gameEnded = true;
+      this.winnerTeamId = this.pointsTeam1 > this.pointsTeam2 ? 1: 2;
+      console.log(this.isWinner(1));
       this.playWinSound();
       return;
     } else if (this.currentQuestionIdx === this.answers.length - 1) {
@@ -230,7 +230,13 @@ export class AppComponent implements OnInit {
     return tries.length > 0;
   }
 
-  private startGame() {
+  private startGame(Round) {
+    this.answersService.round = Round;
+    this.answersService.getAnswers()
+      .subscribe((res) => {
+        this.answers = res;
+        this.eraseAnswers();
+      });
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {
