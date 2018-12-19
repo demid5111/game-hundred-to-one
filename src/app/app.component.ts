@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
   showAnswersMode: boolean;
   showFireworks: boolean;
   gameStarted: boolean;
+  isSoundOn: boolean;
   private openedAnswers: boolean[];
   private startActiveTeam: number;
   private audioFail: HTMLAudioElement;
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
   private audioWin: HTMLAudioElement;
 
   ngOnInit() {
+    this.isSoundOn = false;
     this.teamOneIcon = '/assets/images/3.png';
     this.teamTwoIcon = '/assets/images/5.png';
     this.backIcon = '/assets/images/back.png';
@@ -63,6 +65,10 @@ export class AppComponent implements OnInit {
 
   public isFirstTeamVisible() {
     return this.activeTeam === 1;
+  }
+
+  public switchSound() {
+    this.isSoundOn = !this.isSoundOn;
   }
 
   public isWinner(id) {
@@ -127,7 +133,7 @@ export class AppComponent implements OnInit {
       this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
         : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
       this.gameEnded = true;
-      this.winnerTeamId = this.pointsTeam1 > this.pointsTeam2 ? 1: 2;
+      this.winnerTeamId = this.pointsTeam1 > this.pointsTeam2 ? 1 : 2;
       console.log(this.isWinner(1));
       this.playWinSound();
       return;
@@ -138,7 +144,7 @@ export class AppComponent implements OnInit {
     }
     this.currentQuestionIdx += 1;
     const newTeam = this.activeTeam === 1 ? 2 : 1;
-    if (this.activeTeam === this.startActiveTeam){
+    if (this.activeTeam === this.startActiveTeam) {
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
       this.startActiveTeam = this.activeTeam;
     }
@@ -188,20 +194,24 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private playFailSound(){
-    this.audioFail.play();
+  private playFailSound() {
+    if (this.isSoundOn)
+      this.audioFail.play();
   }
 
-  private playFlipSound(){
-    this.audioFlip.play();
+  private playFlipSound() {
+    if (this.isSoundOn)
+      this.audioFlip.play();
   }
 
   private playCashSound() {
-    this.audioCash.play();
+    if (this.isSoundOn)
+      this.audioCash.play();
   }
 
   private playWinSound() {
-    this.audioWin.play();
+    if (this.isSoundOn)
+      this.audioWin.play();
   }
 
   private initSounds() {
