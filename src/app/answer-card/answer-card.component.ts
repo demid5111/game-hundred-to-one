@@ -23,6 +23,9 @@ export class AnswerCardComponent{
   answer: any;
 
   @Input()
+  num: number;
+
+  @Input()
   id: number;
 
   @Output()

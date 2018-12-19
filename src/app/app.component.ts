@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { AnswersService } from './answers.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,8 @@ import { AnswersService } from './answers.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  winnerTeamId: number;
+  gameEnded: boolean;
   answers: any;
   activeTeam: number;
   title: string;
@@ -26,6 +29,7 @@ export class AppComponent implements OnInit {
   showAnswersMode: boolean;
   showFireworks: boolean;
   gameStarted: boolean;
+  isSoundOn: boolean;
   private openedAnswers: boolean[];
   private startActiveTeam: number;
   private audioFail: HTMLAudioElement;
@@ -34,11 +38,12 @@ export class AppComponent implements OnInit {
   private audioWin: HTMLAudioElement;
 
   ngOnInit() {
-    this.teamOneIcon = '/assets/images/3.png';
-    this.teamTwoIcon = '/assets/images/5.png';
-    this.backIcon = '/assets/images/back.png';
-    this.nextIcon = '/assets/images/next.png';
-    this.placeholder = 'Вопрос';
+    this.isSoundOn = false;
+    this.teamOneIcon = '/assets/images/red.svg';
+    this.teamTwoIcon = '/assets/images/blue.svg';
+    this.backIcon = '/assets/images/back.svg';
+    this.nextIcon = '/assets/images/next.svg';
+    this.placeholder = 'Ответ';
     this.pointsTeam1 = 0;
     this.pointsTeam2 = 0;
     this.failsTeam1 = [1, 1, 1];
@@ -50,22 +55,20 @@ export class AppComponent implements OnInit {
 
     this.initSounds();
 
-    this.answersService.getAnswers()
-      .subscribe((res) => {
-        this.answers = res;
-        this.eraseAnswers();
-      });
-
   }
 
   constructor(private answersService: AnswersService) {
-    this.title = 'Игра: 100-к-1. Шутки про рутину и не только...';
+    this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
   }
 
   public isFirstTeamVisible() {
     return this.activeTeam === 1;
+  }
+
+  public switchSound() {
+    this.isSoundOn = !this.isSoundOn;
   }
 
   public isWinner(id) {
@@ -94,8 +97,9 @@ export class AppComponent implements OnInit {
 
   private getCurrentQuestion() {
     const question = this.answers[this.currentQuestionIdx].question;
-    const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
-    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    //const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
+    //return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    return `${question}`;
   }
 
   private onSelected(id: number) {
@@ -129,6 +133,9 @@ export class AppComponent implements OnInit {
       this.showFireworks = true;
       this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
         : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
+      this.gameEnded = true;
+      this.winnerTeamId = this.pointsTeam1 > this.pointsTeam2 ? 1 : 2;
+      console.log(this.isWinner(1));
       this.playWinSound();
       return;
     } else if (this.currentQuestionIdx === this.answers.length - 1) {
@@ -138,7 +145,7 @@ export class AppComponent implements OnInit {
     }
     this.currentQuestionIdx += 1;
     const newTeam = this.activeTeam === 1 ? 2 : 1;
-    if (this.activeTeam === this.startActiveTeam){
+    if (this.activeTeam === this.startActiveTeam) {
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
       this.startActiveTeam = this.activeTeam;
     }
@@ -188,20 +195,24 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private playFailSound(){
-    this.audioFail.play();
+  private playFailSound() {
+    if (this.isSoundOn)
+      this.audioFail.play();
   }
 
-  private playFlipSound(){
-    this.audioFlip.play();
+  private playFlipSound() {
+    if (this.isSoundOn)
+      this.audioFlip.play();
   }
 
   private playCashSound() {
-    this.audioCash.play();
+    if (this.isSoundOn)
+      this.audioCash.play();
   }
 
   private playWinSound() {
-    this.audioWin.play();
+    if (this.isSoundOn)
+      this.audioWin.play();
   }
 
   private initSounds() {
@@ -230,7 +241,13 @@ export class AppComponent implements OnInit {
     return tries.length > 0;
   }
 
-  private startGame() {
+  private startGame(Round) {
+    this.answersService.round = Round;
+    this.answersService.getAnswers()
+      .subscribe((res) => {
+        this.answers = res;
+        this.eraseAnswers();
+      });
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {
