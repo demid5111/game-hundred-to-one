@@ -39,11 +39,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isSoundOn = false;
-    this.teamOneIcon = '/assets/images/3.png';
-    this.teamTwoIcon = '/assets/images/5.png';
-    this.backIcon = '/assets/images/back.png';
-    this.nextIcon = '/assets/images/next.png';
-    this.placeholder = 'Вопрос';
+    this.teamOneIcon = '/assets/images/red.svg';
+    this.teamTwoIcon = '/assets/images/blue.svg';
+    this.backIcon = '/assets/images/back.svg';
+    this.nextIcon = '/assets/images/next.svg';
+    this.placeholder = 'Ответ';
     this.pointsTeam1 = 0;
     this.pointsTeam2 = 0;
     this.failsTeam1 = [1, 1, 1];
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private answersService: AnswersService) {
-    this.title = 'Игра: 100-к-1. Шутки про рутину и не только...';
+    this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
   }
@@ -97,8 +97,9 @@ export class AppComponent implements OnInit {
 
   private getCurrentQuestion() {
     const question = this.answers[this.currentQuestionIdx].question;
-    const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
-    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    //const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
+    //return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    return `${question}`;
   }
 
   private onSelected(id: number) {
