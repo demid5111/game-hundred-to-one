@@ -12,7 +12,9 @@ export class AnswersService {
   }
 
   public getAnswers() {
-    this.apiUrl = '/assets/answers/answers.json?round='+this.round;
+    /*uncomment this code to use api instead file answers.json
+    //this.apiUrl = 'http://it.shadowhd.ru:10000/answers?round='+this.round;*/
+    this.apiUrl = '/assets/answers/answers.json?round=' + this.round;
     console.log(this.apiUrl);
     return this.http.get(this.apiUrl);
   }
