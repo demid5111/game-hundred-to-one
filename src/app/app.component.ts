@@ -89,8 +89,8 @@ export class AppComponent implements OnInit {
       value: this.pointsTeam1,
 
       // Any option (other than auto and selector) can be passed in here
-      format: 'd',
-      theme: 'slot-machine'
+      theme: 'minimal',
+      format: 'd'
     });
 
     return el;
@@ -260,8 +260,8 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {
-        this.counterTeam1 = this.createOdometer('#odometer1');
-        this.counterTeam2 = this.createOdometer('#odometer2');
+        this.counterTeam1 = this.createOdometer('#odometer-red');
+        this.counterTeam2 = this.createOdometer('#odometer-blue');
       });
 
     }, 1000);
