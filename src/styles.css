@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Alegreya+SC');
+@import url('https://fonts.googleapis.com/css?family=Play');
+@import url('https://fonts.googleapis.com/css?family=Staatliches');
 
 body {
   width: 100%;
@@ -37,4 +38,16 @@ body {
 .col-4 {
   grid-column-start: 4;
   grid-column-end: span 1;
+}
+
+.odometer {
+	font-family: 'Staatliches', cursive;
+}
+
+.team-blue {
+	color:#056CFF;
+}
+
+.team-red {
+	color:#FF4255;
 }

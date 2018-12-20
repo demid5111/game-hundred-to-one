@@ -17,11 +17,12 @@
 
   <div class="team-element team-1 team-container"
        [class.team-enabled]="isFirstTeamVisible() || isWinner(1)"
-       (click)="setActiveTeam(1)">
-    <span class="row-1 col-2 centered text-large" style="color:#FF4255">
+       (click)="setActiveTeam(1)"
+       >
+    <span class="row-1 col-2 centered text-large team-red">
       Red Team
     </span>
-    <div id="odometer1" class="odometer row-2 col-2 centered"></div>
+    <div id="odometer-red" class="odometer row-2 col-2 centered team-red"></div>
     <div class="row-3 col-2 centered">
       <img [src]="teamOneIcon">
     </div>
@@ -33,11 +34,12 @@
 
   <div class="team-element team-2 team-container "
        [class.team-enabled]="!isFirstTeamVisible() || isWinner(2)"
-       (click)="setActiveTeam(2)">
-    <span class="row-1 col-2 centered text-large" style="color:#056CFF">
+        (click)="setActiveTeam(2)"
+       >
+    <span class="row-1 col-2 centered text-large team-blue">
       Blue Team
     </span>
-    <div id="odometer2" class="odometer row-2 col-2 centered"></div>
+    <div id="odometer-blue" class="odometer row-2 col-2 centered team-blue"></div>
     <div class="row-3 col-2 centered">
       <img [src]="teamTwoIcon">
     </div>
