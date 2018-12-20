@@ -252,7 +252,6 @@ export class AppComponent implements OnInit {
 
   private initSounds() {
     this.audioFail = this.loadAudio("fail");
-    this.audioFail.playbackRate = 2.5;
 
     this.audioFlip = this.loadAudio("turn");
 
