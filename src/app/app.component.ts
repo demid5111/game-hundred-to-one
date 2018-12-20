@@ -186,6 +186,10 @@ export class AppComponent implements OnInit {
     const fails = this.activeTeam === 1 ? this.failsTeam1 : this.failsTeam2;
     const opponentsFails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
     // now check if another team has buffer
+    let rej = _.reject(fails, (x) => x === 3);
+    if (rej.length === 0) {
+      this.showAnswersMode = true;
+    }
     if (this.isAnotherTeamBuffer(opponentsFails)) {
       // this means next step
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
