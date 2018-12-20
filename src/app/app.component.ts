@@ -102,15 +102,15 @@ export class AppComponent implements OnInit {
 
   private getCurrentQuestion() {
     const question = this.answers[this.currentQuestionIdx].question;
-    //const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
-    //return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    /*const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
+    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;*/
     return `${question}`;
   }
 
   private onSelected(id: number) {
     this.openedAnswers[id] = true;
     this.playFlipSound();
-    this.playCashSound();
+    /*this.playCashSound();*/
     if (this.showAnswersMode) {
       return;
     }
@@ -191,7 +191,7 @@ export class AppComponent implements OnInit {
     const fails = this.activeTeam === 1 ? this.failsTeam1 : this.failsTeam2;
     const opponentsFails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
     // now check if another team has buffer
-    let rej = _.reject(fails, (x) => x === 3);
+    const rej = _.reject(fails, (x) => x === 3);
     if (rej.length === 0) {
       this.showAnswersMode = true;
     }
@@ -205,59 +205,63 @@ export class AppComponent implements OnInit {
   }
 
   private playFailSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioFail.play();
+    }
   }
 
   private playFlipSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioFlip.play();
+    }
   }
 
   private playCashSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioCash.play();
+    }
   }
 
   private playWinSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioWin.play();
+    }
   }
-  
+
   private loadAudio(fileName) {
-	let audio = new Audio();
-	audio.controls = true;
-	const audioFormats = [
-		{
-			name:'.mp3',
-			type:'audio/mpeg'
-		},{
-			name:'.wav',
-			type:'audio/wav'
-		},{
-			name:'.ogg',
-			type:'audio/ogg'
-		}];
-	
-	audioFormats.forEach(function(format){
-		let source = document.createElement('source')
-		source.src = '/assets/sounds/' + fileName + format.name;
-		source.type = format.type;
-		audio.appendChild(source);
-	})
+    const audio = new Audio();
+    audio.controls = true;
+    const audioFormats = [
+      {
+        name: '.mp3',
+        type: 'audio/mpeg'
+      } , {
+        name: '.wav',
+        type: 'audio/wav'
+      } , {
+        name: '.ogg',
+        type: 'audio/ogg'
+      }];
+
+    audioFormats.forEach(function(format) {
+      const source = document.createElement('source');
+      source.src = '/assets/sounds/' + fileName + format.name;
+      source.type = format.type;
+      audio.appendChild(source);
+    });
     audio.load();
-	
-	return audio;
+
+    return audio;
   }
 
   private initSounds() {
-    this.audioFail = this.loadAudio("fail");
+    this.audioFail = this.loadAudio('fail');
 
-    this.audioFlip = this.loadAudio("turn");
+    this.audioFlip = this.loadAudio('turn');
 
-    this.audioCash = this.loadAudio("cash");
+    this.audioCash = this.loadAudio('cash');
 
-    this.audioWin = this.loadAudio("win");
+    this.audioWin = this.loadAudio('win');
   }
 
   private isAnotherTeamBuffer(fails) {
