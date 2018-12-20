@@ -17,8 +17,7 @@
 
   <div class="team-element team-1 team-container"
        [class.team-enabled]="isFirstTeamVisible() || isWinner(1)"
-       (click)="setActiveTeam(1)"
-       >
+       (click)="setActiveTeam(1)">
     <span class="row-1 col-2 centered text-large" style="color:#FF4255">
       Red Team
     </span>
@@ -34,8 +33,7 @@
 
   <div class="team-element team-2 team-container "
        [class.team-enabled]="!isFirstTeamVisible() || isWinner(2)"
-        (click)="setActiveTeam(2)"
-       >
+       (click)="setActiveTeam(2)">
     <span class="row-1 col-2 centered text-large" style="color:#056CFF">
       Blue Team
     </span>
