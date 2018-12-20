@@ -3,10 +3,10 @@
 package-lock.json
 
 # assets ignore
-#/src/assets/answers/
-#!/src/assets/answers/answers.example.json
-#/src/assets/sounds/
-#!/src/assets/sounds/README.md
+/src/assets/answers/
+!/src/assets/answers/answers.example.json
+/src/assets/sounds/
+!/src/assets/sounds/README.md
 
 # compiled output
 /dist
