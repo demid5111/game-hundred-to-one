@@ -67,6 +67,11 @@ export class AppComponent implements OnInit {
     return this.activeTeam === 1;
   }
 
+
+  private setActiveTeam(id) {
+    this.activeTeam = id;
+  }
+
   public switchSound() {
     this.isSoundOn = !this.isSoundOn;
   }
@@ -84,8 +89,8 @@ export class AppComponent implements OnInit {
       value: this.pointsTeam1,
 
       // Any option (other than auto and selector) can be passed in here
-      format: 'd',
-      theme: 'slot-machine'
+      theme: 'minimal',
+      format: 'd'
     });
 
     return el;
@@ -97,15 +102,15 @@ export class AppComponent implements OnInit {
 
   private getCurrentQuestion() {
     const question = this.answers[this.currentQuestionIdx].question;
-    //const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
-    //return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    /*const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
+    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;*/
     return `${question}`;
   }
 
   private onSelected(id: number) {
     this.openedAnswers[id] = true;
     this.playFlipSound();
-    this.playCashSound();
+    /*this.playCashSound();*/
     if (this.showAnswersMode) {
       return;
     }
@@ -186,6 +191,10 @@ export class AppComponent implements OnInit {
     const fails = this.activeTeam === 1 ? this.failsTeam1 : this.failsTeam2;
     const opponentsFails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
     // now check if another team has buffer
+    const rej = _.reject(fails, (x) => x === 3);
+    if (rej.length === 0) {
+      this.showAnswersMode = true;
+    }
     if (this.isAnotherTeamBuffer(opponentsFails)) {
       // this means next step
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
@@ -196,43 +205,63 @@ export class AppComponent implements OnInit {
   }
 
   private playFailSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioFail.play();
+    }
   }
 
   private playFlipSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioFlip.play();
+    }
   }
 
-  private playCashSound() {
-    if (this.isSoundOn)
+  /*private playCashSound() {
+    if (this.isSoundOn) {
       this.audioCash.play();
-  }
+    }
+  }*/
 
   private playWinSound() {
-    if (this.isSoundOn)
+    if (this.isSoundOn) {
       this.audioWin.play();
+    }
+  }
+
+  private loadAudio(fileName) {
+    const audio = new Audio();
+    audio.controls = true;
+    const audioFormats = [
+      {
+        name: '.mp3',
+        type: 'audio/mpeg'
+      } , {
+        name: '.wav',
+        type: 'audio/wav'
+      } , {
+        name: '.ogg',
+        type: 'audio/ogg'
+      }];
+
+    audioFormats.forEach(function(format) {
+      const source = document.createElement('source');
+      source.src = '/assets/sounds/' + fileName + format.name;
+      source.type = format.type;
+      audio.appendChild(source);
+    });
+    audio.load();
+
+    return audio;
   }
 
   private initSounds() {
-    this.audioFail = new Audio();
-    this.audioFail.src = '/assets/sounds/fail.mp3';
-    this.audioFail.load();
-    this.audioFail.playbackRate = 2.5;
+    this.audioFail = this.loadAudio('fail');
 
-    this.audioFlip = new Audio();
-    this.audioFlip.src = '../../../assets/sounds/turn.mp3';
-    this.audioFlip.load();
+    this.audioFlip = this.loadAudio('turn');
 
-    this.audioCash = new Audio();
-    this.audioCash.src = '../../../assets/sounds/cash.wav';
-    this.audioCash.load();
-    this.audioCash.playbackRate = 2.5;
+    /*this.audioCash = this.loadAudio('cash');*/
 
-    this.audioWin = new Audio();
-    this.audioWin.src = '../../../assets/sounds/win.mp3';
-    this.audioWin.load();
+    this.audioWin = this.loadAudio('win');
   }
 
   private isAnotherTeamBuffer(fails) {
@@ -251,8 +280,8 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {
-        this.counterTeam1 = this.createOdometer('#odometer1');
-        this.counterTeam2 = this.createOdometer('#odometer2');
+        this.counterTeam1 = this.createOdometer('#odometer-red');
+        this.counterTeam2 = this.createOdometer('#odometer-blue');
       });
 
     }, 1000);
