@@ -223,25 +223,42 @@ export class AppComponent implements OnInit {
     if (this.isSoundOn)
       this.audioWin.play();
   }
+  
+  private loadAudio(fileName) {
+	let audio = new Audio();
+	audio.controls = true;
+	const audioFormats = [
+		{
+			name:'.mp3',
+			type:'audio/mpeg'
+		},{
+			name:'.wav',
+			type:'audio/wav'
+		},{
+			name:'.ogg',
+			type:'audio/ogg'
+		}];
+	
+	audioFormats.forEach(function(format){
+		let source = document.createElement('source')
+		source.src = '/assets/sounds/' + fileName + format.name;
+		source.type = format.type;
+		audio.appendChild(source);
+	})
+    audio.load();
+	
+	return audio;
+  }
 
   private initSounds() {
-    this.audioFail = new Audio();
-    this.audioFail.src = '/assets/sounds/fail.mp3';
-    this.audioFail.load();
+    this.audioFail = this.loadAudio("fail");
     this.audioFail.playbackRate = 2.5;
 
-    this.audioFlip = new Audio();
-    this.audioFlip.src = '../../../assets/sounds/turn.mp3';
-    this.audioFlip.load();
+    this.audioFlip = this.loadAudio("turn");
 
-    this.audioCash = new Audio();
-    this.audioCash.src = '../../../assets/sounds/cash.wav';
-    this.audioCash.load();
-    this.audioCash.playbackRate = 2.5;
+    this.audioCash = this.loadAudio("cash");
 
-    this.audioWin = new Audio();
-    this.audioWin.src = '../../../assets/sounds/win.mp3';
-    this.audioWin.load();
+    this.audioWin = this.loadAudio("win");
   }
 
   private isAnotherTeamBuffer(fails) {
