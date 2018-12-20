@@ -18,7 +18,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ])
   ]
 })
-export class AnswerCardComponent{
+export class AnswerCardComponent {
   @Input()
   answer: any;
 
