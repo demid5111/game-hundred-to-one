@@ -67,6 +67,11 @@ export class AppComponent implements OnInit {
     return this.activeTeam === 1;
   }
 
+
+  private setActiveTeam(id) {
+    this.activeTeam = id;
+  }
+
   public switchSound() {
     this.isSoundOn = !this.isSoundOn;
   }
