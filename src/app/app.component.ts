@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
   private onSelected(id: number) {
     this.openedAnswers[id] = true;
     this.playFlipSound();
-    /*this.playCashSound();*/
+    this.playCashSound();
     if (this.showAnswersMode) {
       return;
     }
@@ -216,11 +216,11 @@ export class AppComponent implements OnInit {
     }
   }
 
-  /*private playCashSound() {
+  private playCashSound() {
     if (this.isSoundOn) {
       this.audioCash.play();
     }
-  }*/
+  }
 
   private playWinSound() {
     if (this.isSoundOn) {
@@ -259,7 +259,7 @@ export class AppComponent implements OnInit {
 
     this.audioFlip = this.loadAudio('turn');
 
-    /*this.audioCash = this.loadAudio('cash');*/
+    this.audioCash = this.loadAudio('cash');
 
     this.audioWin = this.loadAudio('win');
   }
