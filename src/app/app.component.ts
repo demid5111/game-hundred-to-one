@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  constructor(private answersService: AnswersService) {
+  constructor(private answersService: AnswersService, private http: HttpClient) {
     this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
@@ -272,11 +272,21 @@ export class AppComponent implements OnInit {
 
   private startGame(Round) {
     this.answersService.round = Round;
-    this.answersService.getAnswers()
-      .subscribe((res) => {
-        this.answers = res;
-        this.eraseAnswers();
-      });
+    //this.answersService.getAnswers()
+    //  .subscribe((res) => {
+    //    this.answers = res;
+    //    this.eraseAnswers();
+    //  });
+	
+	this.http.get('/assets/answers/config.json')
+		.subscribe((configAPI) => {
+			this.http.get(configAPI['apiUrl']+"/"+configAPI['method']+'?round='+this.answersService.round)
+				.subscribe((res) => {
+					this.answers = res;
+					this.eraseAnswers();
+				});
+		});
+	
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {

@@ -3,8 +3,8 @@
 package-lock.json
 
 # assets ignore
-/src/assets/answers/
-!/src/assets/answers/answers.example.json
+#/src/assets/answers/
+#!/src/assets/answers/answers.example.json
 
 # compiled output
 /dist
