@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { AnswersService } from './answers.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -57,7 +56,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  constructor(private answersService: AnswersService, private http: HttpClient) {
+  constructor(private answersService: AnswersService) {
     this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
@@ -170,7 +169,7 @@ export class AppComponent implements OnInit {
 
   private eraseAnswers() {
     const l = _.range(this.answers[this.currentQuestionIdx].answers.length);
-    this.openedAnswers = _.map(l, (x) => false);
+    this.openedAnswers = _.map(l, x => false);
     this.showAnswersMode = false;
     this.failsTeam1 = [1, 1, 1];
     this.failsTeam2 = [1, 1, 1];
@@ -272,21 +271,12 @@ export class AppComponent implements OnInit {
 
   private startGame(Round) {
     this.answersService.round = Round;
-    //this.answersService.getAnswers()
-    //  .subscribe((res) => {
-    //    this.answers = res;
-    //    this.eraseAnswers();
-    //  });
-	
-	this.http.get('/assets/answers/config.json')
-		.subscribe((configAPI) => {
-			this.http.get(configAPI['apiUrl']+"/"+configAPI['method']+'?round='+this.answersService.round)
-				.subscribe((res) => {
-					this.answers = res;
-					this.eraseAnswers();
-				});
-		});
-	
+    this.answersService.getAnswers().subscribe(
+      res => {
+        this.answers = res;
+        this.eraseAnswers();
+      });
+
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {

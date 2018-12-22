@@ -1,25 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-
 @Injectable()
 export class AnswersService {
   public round: number;
   private answers: any;
   private apiUrl: string;
+  private exampleFile: string;
 
   constructor(private http: HttpClient) {
-
+    this.http.get('/assets/answers/config.json').subscribe(configAPI => {
+      this.apiUrl = configAPI['apiUrl'];
+      this.exampleFile = configAPI['method'];
+    });
   }
 
-  /*public getAnswers() {
-    //uncomment this code to use api instead file answers.json
-    //this.apiUrl = 'http://it.shadowhd.ru:10000/answers?round='+this.round;
-    //this.apiUrl = 'http://it.shadowhd.ru:10000/answers';
-    this.apiUrl = '/assets/answers/answers.json';
-	
-	console.log(this.http.get(this.apiUrl))
-	
-    return this.http.get(this.apiUrl);
-  } */
+  public getAnswers() {
+    return this.http.get(this.apiUrl + '/' + this.exampleFile + '?round=' + this.round);
+  }
 }
