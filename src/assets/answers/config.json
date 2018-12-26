@@ -1,4 +1,5 @@
 {
   "apiUrl": "/assets/answers/",
-  "method": "answers.example.json"
+  "file": "answers.example.json",
+  "method": "non-server"
 }

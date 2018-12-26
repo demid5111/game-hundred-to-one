@@ -4,18 +4,23 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class AnswersService {
   public round: number;
-  private answers: any;
   private apiUrl: string;
-  private exampleFile: string;
+  private file: string;
+  private method: string;
 
   constructor(private http: HttpClient) {
     this.http.get('/assets/answers/config.json').subscribe(configAPI => {
       this.apiUrl = configAPI['apiUrl'];
-      this.exampleFile = configAPI['method'];
+      this.file = configAPI['file'];
+      this.method = configAPI['method'];
     });
   }
 
   public getAnswers() {
-    return this.http.get(this.apiUrl + '/' + this.exampleFile + '?round=' + this.round);
+    if (this.method === 'server') {
+      return this.http.get(this.apiUrl + '?round=' + this.round);
+    } else {
+      return this.http.get(this.apiUrl + '/' + this.file + '?round=' + this.round);
+    }
   }
 }
