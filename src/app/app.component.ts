@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   private audioWin: HTMLAudioElement;
 
   ngOnInit() {
-    this.isSoundOn = false;
+    this.isSoundOn = true;
     this.teamOneIcon = '/assets/images/red.svg';
     this.teamTwoIcon = '/assets/images/blue.svg';
     this.backIcon = '/assets/images/back.svg';
