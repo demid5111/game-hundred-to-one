@@ -8,10 +8,12 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('flipState', [
       state('active', style({
-        transform: 'rotateY(179deg)'
+        transform: 'rotateX(179deg)'
+        //transform: 'rotateY(179deg)'
       })),
       state('inactive', style({
-        transform: 'rotateY(0)'
+        transform: 'rotateX(0)'
+        //transform: 'rotateY(0)'
       })),
       transition('active => inactive', animate('400ms ease-out')),
       transition('inactive => active', animate('400ms ease-in'))
