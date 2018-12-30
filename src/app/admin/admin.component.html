@@ -1,3 +1,9 @@
-<p>
-  Добавить новый вопрос
-</p>
+Добавить новый вопрос:
+<div *ngFor="let q of questions">
+  <div>{{q.question}}</div>
+  <div *ngFor="let a of q.answers">
+    <div>{{a.answer}}</div>
+    <div>{{a.quantity}}</div>
+    <br/>
+  </div>
+</div>

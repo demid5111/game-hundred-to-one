@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AnswersService} from '../answers.service';
 
 @Component({
   selector: 'app-admin',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-  constructor() { }
+  questions: any;
+
+  constructor(private answersService: AnswersService) {
+  }
 
   ngOnInit() {
+    this.answersService.getAnswers().subscribe(
+      res => {
+        this.questions = res;
+      }
+    );
   }
 
 }
