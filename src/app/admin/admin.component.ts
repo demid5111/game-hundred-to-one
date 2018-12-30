@@ -21,4 +21,11 @@ export class AdminComponent implements OnInit {
     );
   }
 
+  private saveChanges() {
+    this.answersService.saveQuestions(this.questions).subscribe(
+      res => {
+      }
+    );
+  }
+
 }
