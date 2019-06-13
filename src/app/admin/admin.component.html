@@ -1,11 +1,128 @@
-Добавить новый вопрос:
-<div *ngFor="let q of questions">
-  <input type="text" width="140" [(ngModel)]="q.question"/>
+Игры:
+<table style="border: 1px solid #333;"> 
+  <thead>
+    <td style='width: 600px;'>
+        Первый вопрос
+    </td>
+    <td style='width: 600px;'>
+        Двойная игра
+    </td>
+    <td style='width: 600px;'>
+        Игра наоборот
+    </td>
+  </thead>
+  <tr style="border: 1px solid #333;" *ngFor="let game of games">
+    <td style="border: 1px solid #333;">
+        Вопрос: {{game.firstQuestion.text}}
+        <div>Ответы</div>
+        <table style="border: 1px solid #333;">
+          <thead>
+            <td style="border: 1px solid #333;">Ответ</td><td style="border: 1px solid #333;">Счёт</td>
+          </thead>
+          <tr *ngFor="let a of game.firstQuestion.answers">
+            <td>{{a.text}}</td><td>{{a.score}}</td>
+          </tr>
+        </table>
+    </td>
+    <td style="border: 1px solid #333;">
+        Вопрос: {{game.doubleQuestion.text}}
+        <div>Ответы</div>
+        <table style="border: 1px solid #333;">
+          <thead>
+            <td style="border: 1px solid #333;">Ответ</td><td style="border: 1px solid #333;">Счёт</td>
+          </thead>
+          <tr *ngFor="let a of game.firstQuestion.answers">
+              <td>{{a.text}}</td><td>{{a.score}}</td>
+            </tr>
+        </table>
+    </td>
+    <td style="border: 1px solid #333;">
+        Вопрос: {{game.inversedQuestion.text}}
+        <div>Ответы</div>
+        <table style="border: 1px solid #333;">
+          <thead>
+            <td style="border: 1px solid #333;">Ответ</td><td style="border: 1px solid #333;">Счёт</td>
+          </thead>
+          <tr *ngFor="let a of game.firstQuestion.answers">
+              <td>{{a.text}}</td><td>{{a.score}}</td>
+            </tr>
+        </table>
+    </td>
+    <td>
+      <button>Обновить</button>
+      <button (click)="deleteGame(game)">Удалить</button>
+    </td>
+  </tr>
+
+</table>
+<div *ngFor="let game of games">
+  <!--input type="text" width="140" [(ngModel)]="game.firstQuestion.text"/>
   <div *ngFor="let a of q.answers">
     <input type="text" width="40" [(ngModel)]="a.answer"/>
-    <input type="text" width="40" [(ngModel)]="a.quantity"/>
+    <input type="text" width="40" [(ngModel)]="a.score"/>
     <br/>
+  </div-->
+
+</div>
+
+<div>
+  Описание новой игры:
+  <input type="text" width="40" [(ngModel)]="newgame.desc"/>
+  <div>Первый вопрос:
+      <input type="text" width="40" [(ngModel)]="newgame.firstQuestion.text"/>
+      <table>
+        <thead>
+          <td>Ответ</td><td>Счет</td>
+        </thead>
+        <tr *ngFor="let a of newgame.firstQuestion.answers">
+          <td><input type="text" width="40" [(ngModel)]="a.text"/></td>
+          <td><input type="text" width="40" [(ngModel)]="a.score"/></td>
+          <td><button (click)="removeFromFirstQuestion(a)">Удалить</button></td>
+        </tr>
+        <tr>
+          <td><input type="text" width="40" [(ngModel)]="firstAnswer.text"/></td>
+          <td><input type="text" width="40" [(ngModel)]="firstAnswer.score"/></td>
+          <td><button (click) = "addFirstAnswer()">Добавить</button></td>
+        </tr>
+      </table>
+  </div>
+  <div>Двойная игра:
+      <input type="text" width="40" [(ngModel)]="newgame.doubleQuestion.text"/>
+      <table>
+          <thead>
+            <td>Ответ</td><td>Счет</td>
+          </thead>
+          <tr *ngFor="let a of newgame.doubleQuestion.answers">
+            <td><input type="text" width="40" [(ngModel)]="a.text"/></td>
+            <td><input type="text" width="40" [(ngModel)]="a.score"/></td>
+            <td><button (click)="removeFromDoubleQuestion(a)">Удалить</button></td>
+          </tr>
+          <tr>
+              <td><input type="text" width="40" [(ngModel)]="doubleAnswer.text"/></td>
+              <td><input type="text" width="40" [(ngModel)]="doubleAnswer.score"/></td>
+              <td><button (click) = "addDoubleAnswer()">Добавить</button></td>
+          </tr>
+        </table>
+  </div>
+  <div>Игра наоборот:
+      <input type="text" width="40" [(ngModel)]="newgame.inversedQuestion.text"/>
+      <table>
+          <thead>
+            <td>Ответ</td><td>Счет</td>
+          </thead>
+          <tr *ngFor="let a of newgame.inversedQuestion.answers">
+            <td><input type="text" width="40" [(ngModel)]="a.text"/></td>
+            <td><input type="text" width="40" [(ngModel)]="a.score"/></td>
+            <td><button (click)="removeFromInversedQuestion(a)">Удалить</button></td>
+          </tr>
+          <tr>
+              <td><input type="text" width="40" [(ngModel)]="inversedAnswer.text"/></td>
+              <td><input type="text" width="40" [(ngModel)]="inversedAnswer.score"/></td>
+              <td><button (click) = "addInversedAnswer()">Добавить</button></td>
+          </tr>
+        </table>
   </div>
 </div>
 
-<button (click)="saveChanges()">Сохранить изменения</button>
+
+<button (click)="createGame()">Создать новую игру</button>

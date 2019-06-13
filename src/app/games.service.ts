@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
-export class AnswersService {
+export class GamesService {
   public round: number;
   private apiUrl: string;
   private saveUrl: string;
@@ -14,26 +14,37 @@ export class AnswersService {
   constructor(private http: HttpClient) {
     this.http.get('/assets/answers/config.json').subscribe(configAPI => {
       this.apiUrl = configAPI['apiUrl'];
-      this.saveUrl = configAPI['saveUrl'];
       this.file = configAPI['file'];
       this.method = configAPI['method'];
     });
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type': 'application/json'
       })
     };
   }
 
-  public getAnswers() {
-    if (this.method === 'server') {
-      return this.http.get(this.apiUrl + '?round=' + this.round);
-    } else {
-      return this.http.get(this.apiUrl + '/' + this.file + '?round=' + this.round);
-    }
+  public getGames() {
+      return this.http.get(this.apiUrl + '/games');
   }
 
-  public saveQuestions(questions: any) {
-    return this.http.post(this.saveUrl, questions, this.httpOptions);
+  public getGame(num: number) {
+    return this.http.get(this.apiUrl + '/game')
   }
+
+  public saveGame(game: any) {
+    return this.http.post(this.apiUrl + '/game', game)
+  }
+
+  public updateGame(id: number, game: any) {
+    return this.http.put(this.apiUrl + '/game/' + id, game)
+  }
+
+  public deleteGame(id: number) {
+    return this.http.delete(this.apiUrl + '/game/' + id)
+  }
+
+  /*public saveQuestions(games: any) {
+    return this.http.post(this.saveUrl, questions, this.httpOptions);
+  }*/
 }

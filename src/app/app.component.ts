@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { AnswersService } from './answers.service';
+import { GamesService } from './games.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   winnerTeamId: number;
   gameEnded: boolean;
   adminStarted: boolean;
-  answers: any;
+  game: any;
   activeTeam: number;
   title: string;
   counterTeam1: any;
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 
   }
 
-  constructor(private answersService: AnswersService) {
+  constructor(private gamesService: GamesService) {
     this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
@@ -97,11 +97,11 @@ export class AppComponent implements OnInit {
   }
 
   private getCurrentAnswer(idx) {
-    return this.answers[this.currentQuestionIdx].answers[idx];
+    return this.game.answers[this.currentQuestionIdx].answers[idx];
   }
 
   private getCurrentQuestion() {
-    const question = this.answers[this.currentQuestionIdx].question;
+    const question = this.game.answers[this.currentQuestionIdx].question;
     /*const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
     return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;*/
     return `${question}`;
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
     if (this.showAnswersMode) {
       return;
     }
-    const award = +(this.answers[this.currentQuestionIdx].answers[id].quantity);
+    const award = +(this.games[this.currentQuestionIdx].answers[id].quantity);
     if (this.activeTeam === 1) {
       this.pointsTeam1 += award;
       this.counterTeam1.innerHTML = this.pointsTeam1;
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
   }
 
   private nextQuestion() {
-    if (this.currentQuestionIdx === this.answers.length - 1
+    if (this.currentQuestionIdx === this.games.length - 1
       && (this.isNextBtnEnabled() ||
         (this.isAnotherTeamBuffer(this.failsTeam1)
           && this.isAnotherTeamBuffer(this.failsTeam2)))) {
@@ -143,7 +143,7 @@ export class AppComponent implements OnInit {
       console.log(this.isWinner(1));
       this.playWinSound();
       return;
-    } else if (this.currentQuestionIdx === this.answers.length - 1) {
+    } else if (this.currentQuestionIdx === this.games.length - 1) {
       return;
     } else if (!this.isNextBtnEnabled()) {
       return;
@@ -169,7 +169,7 @@ export class AppComponent implements OnInit {
   }
 
   private eraseAnswers() {
-    const l = _.range(this.answers[this.currentQuestionIdx].answers.length);
+    const l = _.range(this.games[this.currentQuestionIdx].answers.length);
     this.openedAnswers = _.map(l, x => false);
     this.showAnswersMode = false;
     this.failsTeam1 = [1, 1, 1];

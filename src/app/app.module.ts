@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AnswerCardComponent } from './answer-card/answer-card.component';
 import { IndicatorComponent } from './indicator/indicator.component';
-import { AnswersService } from './answers.service';
+import { GamesService } from './games.service';
 import { AdminComponent } from './admin/admin.component';
 
 
@@ -26,7 +26,7 @@ import { AdminComponent } from './admin/admin.component';
     FormsModule
   ],
   providers: [
-    AnswersService
+    GamesService
   ],
   bootstrap: [AppComponent]
 })
