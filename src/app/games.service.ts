@@ -28,8 +28,8 @@ export class GamesService {
       return this.http.get(this.apiUrl + '/games');
   }
 
-  public getGame(num: number) {
-    return this.http.get(this.apiUrl + '/game')
+  public getGame(id: number) {
+    return this.http.get(this.apiUrl + '/game/' + id)
   }
 
   public saveGame(game: any) {
@@ -44,7 +44,4 @@ export class GamesService {
     return this.http.delete(this.apiUrl + '/game/' + id)
   }
 
-  /*public saveQuestions(games: any) {
-    return this.http.post(this.saveUrl, questions, this.httpOptions);
-  }*/
 }

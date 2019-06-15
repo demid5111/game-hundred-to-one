@@ -11,7 +11,8 @@ export class AppComponent implements OnInit {
   winnerTeamId: number;
   gameEnded: boolean;
   adminStarted: boolean;
-  game: any;
+  currentGame: any;
+  currentQuestionNumber: number;
   activeTeam: number;
   title: string;
   counterTeam1: any;
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit {
     this.showFireworks = false;
     this.gameStarted = false;
     this.startActiveTeam = this.activeTeam;
-    this.adminStarted = false;
+    this.currentQuestionNumber = 0;
     this.initSounds();
 
   }
@@ -97,14 +98,17 @@ export class AppComponent implements OnInit {
   }
 
   private getCurrentAnswer(idx) {
-    return this.game.answers[this.currentQuestionIdx].answers[idx];
+    return this.getCurrentQuestion().answers[idx];
   }
 
   private getCurrentQuestion() {
-    const question = this.game.answers[this.currentQuestionIdx].question;
-    /*const addition = `${question.indexOf('?') !== -1 ? '' : '?'}`;
-    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;*/
-    return `${question}`;
+    if (this.currentQuestionNumber === 0) {
+      return this.currentGame.firstQuestion;
+    } else if (this.currentQuestionNumber === 1) {
+      return this.currentGame.doubleQuestion;
+    } else {
+      return this.currentGame.inversedQuestion;
+    }
   }
 
   private onSelected(id: number) {
@@ -114,7 +118,7 @@ export class AppComponent implements OnInit {
     if (this.showAnswersMode) {
       return;
     }
-    const award = +(this.games[this.currentQuestionIdx].answers[id].quantity);
+    const award = +(this.getCurrentQuestion().answers[id].score);
     if (this.activeTeam === 1) {
       this.pointsTeam1 += award;
       this.counterTeam1.innerHTML = this.pointsTeam1;
@@ -131,8 +135,7 @@ export class AppComponent implements OnInit {
   }
 
   private nextQuestion() {
-    if (this.currentQuestionIdx === this.games.length - 1
-      && (this.isNextBtnEnabled() ||
+    if (this.currentQuestionNumber === 2 && (this.isNextBtnEnabled() ||
         (this.isAnotherTeamBuffer(this.failsTeam1)
           && this.isAnotherTeamBuffer(this.failsTeam2)))) {
       this.showFireworks = true;
@@ -143,11 +146,12 @@ export class AppComponent implements OnInit {
       console.log(this.isWinner(1));
       this.playWinSound();
       return;
-    } else if (this.currentQuestionIdx === this.games.length - 1) {
+    } else if (this.currentQuestionNumber === 2) {
       return;
     } else if (!this.isNextBtnEnabled()) {
       return;
     }
+    this.currentQuestionNumber++;
     this.currentQuestionIdx += 1;
     const newTeam = this.activeTeam === 1 ? 2 : 1;
     if (this.activeTeam === this.startActiveTeam) {
@@ -158,10 +162,11 @@ export class AppComponent implements OnInit {
   }
 
   private previousQuestion() {
-    if (this.currentQuestionIdx === 0) {
+    if (this.currentQuestionNumber === 0) {
       return;
+    } else {
+      this.currentQuestionNumber--;
     }
-    this.currentQuestionIdx -= 1;
   }
 
   private isNextBtnEnabled() {
@@ -169,7 +174,7 @@ export class AppComponent implements OnInit {
   }
 
   private eraseAnswers() {
-    const l = _.range(this.games[this.currentQuestionIdx].answers.length);
+    const l = _.range(this.getCurrentQuestion().answers.length);
     this.openedAnswers = _.map(l, x => false);
     this.showAnswersMode = false;
     this.failsTeam1 = [1, 1, 1];
@@ -256,11 +261,8 @@ export class AppComponent implements OnInit {
 
   private initSounds() {
     this.audioFail = this.loadAudio('fail');
-
     this.audioFlip = this.loadAudio('turn');
-
     this.audioCash = this.loadAudio('cash');
-
     this.audioWin = this.loadAudio('win');
   }
 
@@ -270,11 +272,11 @@ export class AppComponent implements OnInit {
     return tries.length > 0;
   }
 
-  private startGame(Round) {
-    this.answersService.round = Round;
-    this.answersService.getAnswers().subscribe(
+  private startGame() {
+    this.gamesService.getGame(15).subscribe(
       res => {
-        this.answers = res;
+        this.currentQuestionNumber = 0;
+        this.currentGame = res;
         this.eraseAnswers();
       });
 
