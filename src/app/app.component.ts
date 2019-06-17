@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   showFireworks: boolean;
   gameStarted: boolean;
   isSoundOn: boolean;
+  games: any;
   private openedAnswers: boolean[];
   private startActiveTeam: number;
   private audioFail: HTMLAudioElement;
@@ -55,7 +56,9 @@ export class AppComponent implements OnInit {
     this.startActiveTeam = this.activeTeam;
     this.currentQuestionNumber = 0;
     this.initSounds();
-
+    this.gamesService.getGames().subscribe(res => {
+      this.games = res;
+    });
   }
 
   constructor(private gamesService: GamesService) {
@@ -272,8 +275,8 @@ export class AppComponent implements OnInit {
     return tries.length > 0;
   }
 
-  private startGame() {
-    this.gamesService.getGame(15).subscribe(
+  private startGame(id: number) {
+    this.gamesService.getGame(id).subscribe(
       res => {
         this.currentQuestionNumber = 0;
         this.currentGame = res;

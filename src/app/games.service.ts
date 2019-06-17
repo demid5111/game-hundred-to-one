@@ -12,11 +12,12 @@ export class GamesService {
   private httpOptions: any;
 
   constructor(private http: HttpClient) {
-    this.http.get('/assets/answers/config.json').subscribe(configAPI => {
+    /*this.http.get('/assets/answers/config.json').subscribe(configAPI => {
       this.apiUrl = configAPI['apiUrl'];
       this.file = configAPI['file'];
       this.method = configAPI['method'];
-    });
+    });*/
+    this.apiUrl = 'http://it.shadowhd.ru:10045';
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -29,19 +30,19 @@ export class GamesService {
   }
 
   public getGame(id: number) {
-    return this.http.get(this.apiUrl + '/game/' + id)
+    return this.http.get(this.apiUrl + '/game/' + id);
   }
 
   public saveGame(game: any) {
-    return this.http.post(this.apiUrl + '/game', game)
+    return this.http.post(this.apiUrl + '/game', game);
   }
 
   public updateGame(id: number, game: any) {
-    return this.http.put(this.apiUrl + '/game/' + id, game)
+    return this.http.put(this.apiUrl + '/game/' + id, game);
   }
 
   public deleteGame(id: number) {
-    return this.http.delete(this.apiUrl + '/game/' + id)
+    return this.http.delete(this.apiUrl + '/game/' + id);
   }
 
 }

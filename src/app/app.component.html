@@ -83,17 +83,11 @@
   <span class="text-large-2x">
     Хотите сыграть?
   </span>
-  <p>Выберите раунд игры</p>
+  <p>Выберите, в какую игру хотите сыграть</p>
   <div class="form-group">
-    <button type="button btn-lg" (click)="startGame()" class="btn btn-primary">Первый раунд</button>
-  </div>
-  <br>
-  <div class="form-group">
-    <button type="button btn-lg" (click)="startGame()" class="btn btn-secondary">Второй раунд</button>
-  </div>
-  <br>
-  <div class="form-group">
-    <button type="button btn-lg" (click)="startGame()" class="btn btn-success">Третий раунд</button>
+    <div *ngFor="let game of games">
+        <button type="button btn-lg" (click)="startGame(game.id)" class="btn btn-primary">{{game.desc}}</button>
+    </div>
   </div>
   <br>
   <div class="form-group">
