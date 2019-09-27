@@ -29,22 +29,22 @@
   user-select: none;
   border-radius: .2em;
   box-shadow: 0 2.5em .9em -2em #555;
-  background-color: #05aefc;
+  background-color: #056CFF;
   transition: transform .8s cubic-bezier(.63, -0.32, .4, 1.39);
 }
 
 .tp-box__front {
-  -webkit-transform: rotateY(0deg);
-  -ms-transform: rotateY(0deg);
-  transform: rotateY(0deg);
+  -webkit-transform: rotateX(0deg);
+  -ms-transform: rotateX(0deg);
+  transform: rotateX(0deg);
 
 }
 
 .tp-box__back {
-  background: #66cc00;
-  -webkit-transform: rotateY(180deg);
-  -ms-transform: rotateY(180deg);
-  transform: rotateY(180deg);
+  background: #FF4255;
+  -webkit-transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  transform: rotateX(180deg);
 }
 
 .answer-container {

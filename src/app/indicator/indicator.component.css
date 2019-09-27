@@ -23,13 +23,12 @@
   height: 50px;
   background-color: #a0a0a0;
   border-radius: 50%;
-  border: 2px solid #1f1f1f;
   display:block;
   margin:auto;
 }
 
 .misses-container .indicator-green {
-  background-color: #20e11b;
+  background-color: #056CFF;
 }
 
 .misses-container .indicator-yellow {
@@ -37,5 +36,5 @@
 }
 
 .misses-container .indicator-red {
-  background-color: #F00;
+  background-color: #FF4255;
 }

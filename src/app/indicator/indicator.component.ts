@@ -17,8 +17,8 @@ export class IndicatorComponent {
         return indicatorClassNameMap.get(this.indicatorColor[id]);
     }
 
-    private onFailed(id:number){
-      if (this.indicatorColor[id] === 3){
+    public onFailed(id: number) {
+      if (this.indicatorColor[id] === 3) {
         return;
       }
       this.failedAnswerCb.emit(id);

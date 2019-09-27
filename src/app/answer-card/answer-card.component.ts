@@ -8,31 +8,36 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('flipState', [
       state('active', style({
-        transform: 'rotateY(179deg)'
+        transform: 'rotateX(179deg)'
+        //transform: 'rotateY(179deg)'
       })),
       state('inactive', style({
-        transform: 'rotateY(0)'
+        transform: 'rotateX(0)'
+        //transform: 'rotateY(0)'
       })),
       transition('active => inactive', animate('400ms ease-out')),
       transition('inactive => active', animate('400ms ease-in'))
     ])
   ]
 })
-export class AnswerCardComponent{
+export class AnswerCardComponent {
   @Input()
   answer: any;
+
+  @Input()
+  num: number;
 
   @Input()
   id: number;
 
   @Output()
-  answeredCb : EventEmitter<any> = new EventEmitter();
+  answeredCb: EventEmitter<any> = new EventEmitter();
 
-  flip: string = 'inactive';
-  guessMe: string = 'Отгадай-ка!';
+  flip = 'inactive';
+  guessMe = 'Отгадай-ка!';
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.firstValue){
+    if (changes.firstValue) {
       return;
     }
 
@@ -41,11 +46,11 @@ export class AnswerCardComponent{
 
   toggleFlip() {
     // reject any new re-opens of the answer
-    if (this.flip == 'active') {
+    if (this.flip === 'active') {
       return;
     }
-    this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
-    if (this.flip == 'active') {
+    this.flip = (this.flip === 'inactive') ? 'active' : 'inactive';
+    if (this.flip === 'active') {
       this.answeredCb.emit(this.id);
     }
   }

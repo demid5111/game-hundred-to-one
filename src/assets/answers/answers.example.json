@@ -1,0 +1,77 @@
+[
+  {
+    "question": "Простая игра",
+    "answers": [
+      {
+        "answer": "Ответ 1",
+        "quantity": "56"
+      },
+      {
+        "answer": "Ответ 2",
+        "quantity": "28"
+      },
+      {
+        "answer": "Ответ 3",
+        "quantity": "12"
+      },
+      {
+        "answer": "Ответ 4",
+        "quantity": "4"
+      }
+    ]
+  },
+  {
+    "question": "Двойная игра",
+    "answers": [
+      {
+        "answer": "Ответ 1",
+        "quantity": "72"
+      },
+      {
+        "answer": "Ответ 2",
+        "quantity": "52"
+      },
+      {
+        "answer": "Ответ 3",
+        "quantity": "42"
+      },
+      {
+        "answer": "Ответ 4",
+        "quantity": "22"
+      },
+      {
+        "answer": "Ответ 5",
+        "quantity": "12"
+      }
+    ]
+  },
+  {
+    "question": "Игра наоборот",
+    "answers": [
+      {
+        "answer": "Ответ 1",
+        "quantity": "8"
+      },
+      {
+        "answer": "Ответ 2",
+        "quantity": "16"
+      },
+      {
+        "answer": "Ответ 3",
+        "quantity": "32"
+      },
+      {
+        "answer": "Ответ 4",
+        "quantity": "64"
+      },
+      {
+        "answer": "Ответ 5",
+        "quantity": "128"
+      },
+      {
+        "answer": "Ответ 6",
+        "quantity": "256"
+      }
+    ]
+  }
+]

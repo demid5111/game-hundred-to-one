@@ -3,24 +3,26 @@
   <div class="after"></div>
 </div>
 
-<div class="root-container" *ngIf="gameStarted">
+<div class="root-container" *ngIf="gameStarted && !adminStarted">
   <div class="game-name">
     <span>
-      {{title}}
+      {{getCurrentQuestion().text}}
     </span>
   </div>
 
-  <div class="game-question text-large centered"
+  <!-- <div class="game-question text-large centered"
        *ngIf="answers">
     {{getCurrentQuestion()}}
-  </div>
+  </div> -->
 
   <div class="team-element team-1 team-container"
-       [class.team-enabled]="isFirstTeamVisible() || isWinner(1)">
-    <span class="row-1 col-2 centered text-large">
-      Team 1
+       [class.team-enabled]="isFirstTeamVisible() || isWinner(1)"
+       (click)="setActiveTeam(1)"
+       >
+    <span class="row-1 col-2 centered text-large team-red">
+      Red Team
     </span>
-    <div id="odometer1" class="odometer row-2 col-2 centered"></div>
+    <div id="odometer-red" class="odometer row-2 col-2 centered team-red"></div>
     <div class="row-3 col-2 centered">
       <img [src]="teamOneIcon">
     </div>
@@ -30,12 +32,13 @@
     </div>
   </div>
 
-  <div class="team-element team-2 team-container"
-       [class.team-enabled]="!isFirstTeamVisible() || isWinner(2)">
-    <span class="row-1 col-2 centered text-large">
-      Team 2
+  <div class="team-element team-2 team-container "
+       [class.team-enabled]="!isFirstTeamVisible() || isWinner(2)"
+        (click)="setActiveTeam(2)">
+    <span class="row-1 col-2 centered text-large team-blue">
+      Blue Team
     </span>
-    <div id="odometer2" class="odometer row-2 col-2 centered"></div>
+    <div id="odometer-blue" class="odometer row-2 col-2 centered team-blue"></div>
     <div class="row-3 col-2 centered">
       <img [src]="teamTwoIcon">
     </div>
@@ -45,27 +48,15 @@
     </div>
   </div>
 
-  <div class="choices choices-container"
-       *ngIf="answers">
-    <app-answer-card class="single-choice single-choice-1"
-                     [answer]="getCurrentAnswer(0)"
-                     (answeredCb)="onSelected(0)"></app-answer-card>
-    <app-answer-card class="single-choice single-choice-2"
-                     [answer]="getCurrentAnswer(1)"
-                     (answeredCb)="onSelected(1)"></app-answer-card>
-    <app-answer-card class="single-choice single-choice-3"
-                     [answer]="getCurrentAnswer(2)"
-                     (answeredCb)="onSelected(2)"></app-answer-card>
-    <app-answer-card class="single-choice single-choice-4"
-                     [answer]="getCurrentAnswer(3)"
-                     (answeredCb)="onSelected(3)"></app-answer-card>
-    <app-answer-card class="single-choice single-choice-5"
-                     [answer]="getCurrentAnswer(4)"
-                     (answeredCb)="onSelected(4)"></app-answer-card>
+  <div class="choices choices-container">
+    <app-answer-card *ngFor="let answer of getCurrentQuestion().answers; let i = index"
+                     class="single-choice single-choice-i"
+                     [num]="i+1"
+                     [answer]="getCurrentAnswer(i)"
+                     (answeredCb)="onSelected(i)"></app-answer-card>
   </div>
 
-  <div class="controls controls-container"
-       *ngIf="answers">
+  <div class="controls controls-container">
     <div class="col-2 row-1">
       <div class="img-circular back-btn"
            (click)="previousQuestion()"></div>
@@ -77,6 +68,39 @@
   </div>
 </div>
 
+<div>
+  <button (click)="switchSound()">
+    <span *ngIf="isSoundOn">
+      Выключить звук
+    </span>
+    <span *ngIf="!isSoundOn">
+      Включить звук
+    </span>
+  </button>
+</div>
+
+<div class="container" *ngIf="!gameStarted && !adminStarted">
+  <span class="text-large-2x">
+    Хотите сыграть?
+  </span>
+  <p>Выберите, в какую игру хотите сыграть</p>
+  <div class="form-group">
+    <div *ngFor="let game of games">
+        <button type="button btn-lg" (click)="startGame(game.id)" class="btn btn-primary">{{game.desc}}</button>
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <button type="button btn-lg" (click)="startAdmin()" class="btn btn-danger">Административная панель</button>
+  </div>
+</div>
+
+<app-admin *ngIf="adminStarted">
+</app-admin>
+<br>
+<button *ngIf="adminStarted" type="button btn-lg" (click)="endAdmin()" class="btn btn-danger">Покинуть административную панель</button>
+
+<!--
 <div class='container' *ngIf="!gameStarted" (click)="startGame()">
   <div>
     <span class="text-large-2x">
@@ -84,21 +108,18 @@
     </span>
   </div>
   <a href='#' class='playBut'>
-
-    <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In  -->
     <svg version="1.1"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" width="213.7px" height="213.7px" viewBox="0 0 213.7 213.7" enable-background="new 0 0 213.7 213.7"
-	 xml:space="preserve">
+         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+      x="0px" y="0px" width="213.7px" height="213.7px" viewBox="0 0 213.7 213.7" enable-background="new 0 0 213.7 213.7"
+         xml:space="preserve">
 
-<polygon class='triangle' id="XMLID_18_" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-	73.5,62.5 148.5,105.8 73.5,149.1 "/>
+      <polygon class='triangle' id="XMLID_18_" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+  73.5,62.5 148.5,105.8 73.5,149.1 "/>
 
-<circle class='circle' id="XMLID_17_" fill="none"  stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="106.8" cy="106.8" r="103.3"/>
-</svg>
+      <circle class='circle' id="XMLID_17_" fill="none"  stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="106.8" cy="106.8" r="103.3"/>
+    </svg>
 
 
   </a>
 </div>
-
-
+-->

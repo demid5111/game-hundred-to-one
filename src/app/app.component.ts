@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { AnswersService } from './answers.service';
+import { GamesService } from './games.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,11 @@ import { AnswersService } from './answers.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  answers: any;
+  winnerTeamId: number;
+  gameEnded: boolean;
+  adminStarted: boolean;
+  currentGame: any;
+  currentQuestionNumber: number;
   activeTeam: number;
   title: string;
   counterTeam1: any;
@@ -26,6 +30,8 @@ export class AppComponent implements OnInit {
   showAnswersMode: boolean;
   showFireworks: boolean;
   gameStarted: boolean;
+  isSoundOn: boolean;
+  games: any;
   private openedAnswers: boolean[];
   private startActiveTeam: number;
   private audioFail: HTMLAudioElement;
@@ -34,11 +40,12 @@ export class AppComponent implements OnInit {
   private audioWin: HTMLAudioElement;
 
   ngOnInit() {
-    this.teamOneIcon = '/assets/images/3.png';
-    this.teamTwoIcon = '/assets/images/5.png';
-    this.backIcon = '/assets/images/back.png';
-    this.nextIcon = '/assets/images/next.png';
-    this.placeholder = 'Вопрос';
+    this.isSoundOn = true;
+    this.teamOneIcon = '/assets/images/red.svg';
+    this.teamTwoIcon = '/assets/images/blue.svg';
+    this.backIcon = '/assets/images/back.svg';
+    this.nextIcon = '/assets/images/next.svg';
+    this.placeholder = 'Ответ';
     this.pointsTeam1 = 0;
     this.pointsTeam2 = 0;
     this.failsTeam1 = [1, 1, 1];
@@ -47,29 +54,34 @@ export class AppComponent implements OnInit {
     this.showFireworks = false;
     this.gameStarted = false;
     this.startActiveTeam = this.activeTeam;
-
+    this.currentQuestionNumber = 0;
     this.initSounds();
-
-    this.answersService.getAnswers()
-      .subscribe((res) => {
-        this.answers = res;
-        this.eraseAnswers();
-      });
-
+    this.gamesService.getGames().subscribe(res => {
+      this.games = res;
+    });
   }
 
-  constructor(private answersService: AnswersService) {
-    this.title = "Игра: 100-к-1. Шутки про рутину и не только...";
+  constructor(private gamesService: GamesService) {
+    this.title = 'Тхис баттл';
     this.activeTeam = 1;
     this.currentQuestionIdx = 0;
   }
 
   public isFirstTeamVisible() {
-    return this.activeTeam == 1;
+    return this.activeTeam === 1;
+  }
+
+
+  private setActiveTeam(id) {
+    this.activeTeam = id;
+  }
+
+  public switchSound() {
+    this.isSoundOn = !this.isSoundOn;
   }
 
   public isWinner(id) {
-    return this.activeTeam == id || this.activeTeam == 3;
+    return this.activeTeam === id || this.activeTeam === 3;
   }
 
   private createOdometer(id) {
@@ -81,21 +93,25 @@ export class AppComponent implements OnInit {
       value: this.pointsTeam1,
 
       // Any option (other than auto and selector) can be passed in here
-      format: 'd',
-      theme: 'slot-machine'
+      theme: 'minimal',
+      format: 'd'
     });
 
     return el;
   }
 
   private getCurrentAnswer(idx) {
-    return this.answers[this.currentQuestionIdx].answers[idx];
+    return this.getCurrentQuestion().answers[idx];
   }
 
   private getCurrentQuestion() {
-    const question = this.answers[this.currentQuestionIdx].question;
-    const addition = `${question.indexOf('?') != -1 ? '' : '?'}`;
-    return `${this.placeholder} ${this.currentQuestionIdx + 1}: ${question}${addition}`;
+    if (this.currentQuestionNumber === 0) {
+      return this.currentGame.firstQuestion;
+    } else if (this.currentQuestionNumber === 1) {
+      return this.currentGame.doubleQuestion;
+    } else {
+      return this.currentGame.inversedQuestion;
+    }
   }
 
   private onSelected(id: number) {
@@ -105,8 +121,8 @@ export class AppComponent implements OnInit {
     if (this.showAnswersMode) {
       return;
     }
-    const award = +(this.answers[this.currentQuestionIdx].answers[id].quantity);
-    if (this.activeTeam == 1) {
+    const award = +(this.getCurrentQuestion().answers[id].score);
+    if (this.activeTeam === 1) {
       this.pointsTeam1 += award;
       this.counterTeam1.innerHTML = this.pointsTeam1;
     } else {
@@ -122,23 +138,26 @@ export class AppComponent implements OnInit {
   }
 
   private nextQuestion() {
-    if (this.currentQuestionIdx === this.answers.length - 1
-      && (this.isNextBtnEnabled() ||
+    if (this.currentQuestionNumber === 2 && (this.isNextBtnEnabled() ||
         (this.isAnotherTeamBuffer(this.failsTeam1)
           && this.isAnotherTeamBuffer(this.failsTeam2)))) {
       this.showFireworks = true;
       this.activeTeam = this.pointsTeam1 > this.pointsTeam2 ? 1
         : this.pointsTeam1 === this.pointsTeam2 ? 1 : 2;
+      this.gameEnded = true;
+      this.winnerTeamId = this.pointsTeam1 > this.pointsTeam2 ? 1 : 2;
+      console.log(this.isWinner(1));
       this.playWinSound();
       return;
-    } else if (this.currentQuestionIdx === this.answers.length - 1) {
+    } else if (this.currentQuestionNumber === 2) {
       return;
     } else if (!this.isNextBtnEnabled()) {
       return;
     }
+    this.currentQuestionNumber++;
     this.currentQuestionIdx += 1;
     const newTeam = this.activeTeam === 1 ? 2 : 1;
-    if (this.activeTeam === this.startActiveTeam){
+    if (this.activeTeam === this.startActiveTeam) {
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
       this.startActiveTeam = this.activeTeam;
     }
@@ -146,10 +165,11 @@ export class AppComponent implements OnInit {
   }
 
   private previousQuestion() {
-    if (this.currentQuestionIdx === 0) {
+    if (this.currentQuestionNumber === 0) {
       return;
+    } else {
+      this.currentQuestionNumber--;
     }
-    this.currentQuestionIdx -= 1;
   }
 
   private isNextBtnEnabled() {
@@ -157,8 +177,8 @@ export class AppComponent implements OnInit {
   }
 
   private eraseAnswers() {
-    const l = _.range(this.answers[this.currentQuestionIdx].answers.length);
-    this.openedAnswers = _.map(l, (x) => false);
+    const l = _.range(this.getCurrentQuestion().answers.length);
+    this.openedAnswers = _.map(l, x => false);
     this.showAnswersMode = false;
     this.failsTeam1 = [1, 1, 1];
     this.failsTeam2 = [1, 1, 1];
@@ -179,6 +199,10 @@ export class AppComponent implements OnInit {
     const fails = this.activeTeam === 1 ? this.failsTeam1 : this.failsTeam2;
     const opponentsFails = this.activeTeam === 1 ? this.failsTeam2 : this.failsTeam1;
     // now check if another team has buffer
+    const rej = _.reject(fails, (x) => x === 3);
+    if (rej.length === 0) {
+      this.showAnswersMode = true;
+    }
     if (this.isAnotherTeamBuffer(opponentsFails)) {
       // this means next step
       this.activeTeam = this.activeTeam === 1 ? 2 : 1;
@@ -188,40 +212,61 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private playFailSound(){
-    this.audioFail.play();
+  private playFailSound() {
+    if (this.isSoundOn) {
+      this.audioFail.play();
+    }
   }
 
-  private playFlipSound(){
-    this.audioFlip.play();
+  private playFlipSound() {
+    if (this.isSoundOn) {
+      this.audioFlip.play();
+    }
   }
 
-  private playCashSound(){
-    this.audioCash.play();
+  private playCashSound() {
+    if (this.isSoundOn) {
+      this.audioCash.play();
+    }
   }
 
-  private playWinSound(){
-    this.audioWin.play();
+  private playWinSound() {
+    if (this.isSoundOn) {
+      this.audioWin.play();
+    }
   }
 
-  private initSounds(){
-    this.audioFail = new Audio();
-    this.audioFail.src = "/assets/sounds/fail.mp3";
-    this.audioFail.load();
-    this.audioFail.playbackRate=2.5;
+  private loadAudio(fileName) {
+    const audio = new Audio();
+    audio.controls = true;
+    const audioFormats = [
+      {
+        name: '.mp3',
+        type: 'audio/mpeg'
+      } , {
+        name: '.wav',
+        type: 'audio/wav'
+      } , {
+        name: '.ogg',
+        type: 'audio/ogg'
+      }];
 
-    this.audioFlip = new Audio();
-    this.audioFlip.src = "../../../assets/sounds/turn.mp3";
-    this.audioFlip.load();
+    audioFormats.forEach(function(format) {
+      const source = document.createElement('source');
+      source.src = '/assets/sounds/' + fileName + format.name;
+      source.type = format.type;
+      audio.appendChild(source);
+    });
+    audio.load();
 
-    this.audioCash = new Audio();
-    this.audioCash.src = "../../../assets/sounds/cash.wav";
-    this.audioCash.load();
-    this.audioCash.playbackRate=2.5;
+    return audio;
+  }
 
-    this.audioWin = new Audio();
-    this.audioWin.src = "../../../assets/sounds/win.mp3";
-    this.audioWin.load();
+  private initSounds() {
+    this.audioFail = this.loadAudio('fail');
+    this.audioFlip = this.loadAudio('turn');
+    this.audioCash = this.loadAudio('cash');
+    this.audioWin = this.loadAudio('win');
   }
 
   private isAnotherTeamBuffer(fails) {
@@ -230,14 +275,30 @@ export class AppComponent implements OnInit {
     return tries.length > 0;
   }
 
-  private startGame() {
+  private startGame(id: number) {
+    this.gamesService.getGame(id).subscribe(
+      res => {
+        this.currentQuestionNumber = 0;
+        this.currentGame = res;
+        this.eraseAnswers();
+      });
+
     setTimeout(() => {
       this.gameStarted = true;
       setTimeout(() => {
-        this.counterTeam1 = this.createOdometer('#odometer1');
-        this.counterTeam2 = this.createOdometer('#odometer2');
+        this.counterTeam1 = this.createOdometer('#odometer-red');
+        this.counterTeam2 = this.createOdometer('#odometer-blue');
       });
 
     }, 1000);
   }
+
+  private startAdmin() {
+    this.adminStarted = true;
+  }
+
+  private endAdmin() {
+    this.adminStarted = false;
+  }
+
 }

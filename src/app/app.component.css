@@ -85,8 +85,8 @@
 .choices {
   grid-column-start: 2;
   grid-column-end: span 1;
-  grid-row-start: 3;
-  grid-row-end: span 4;
+  grid-row-start: 2;
+  grid-row-end: span 3;
   text-align: center;
 }
 
@@ -150,7 +150,7 @@
 .controls {
   grid-column-start: 2;
   grid-column-end: span 1;
-  grid-row-start: 7;
+  grid-row-start: 5;
   grid-row-end: span 1;
 }
 
@@ -184,11 +184,11 @@
 }
 
 .back-btn {
-  background-image: url('../assets/images/back.png');
+  background-image: url('../assets/images/back.svg');
 }
 
 .next-btn {
-  background-image: url('../assets/images/next.png');
+  background-image: url('../assets/images/next.svg');
   float: right;
 }
 
